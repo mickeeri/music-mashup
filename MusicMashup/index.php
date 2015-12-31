@@ -8,6 +8,11 @@ require_once ("views/LayoutView.php");
 $nv = new \views\NavigationView();
 $mc = new \controllers\MasterController($nv);
 
+// To show better var-dumps
+if ($_SERVER['HTTP_HOST'] === "localhost:63342") {
+    require_once("../../kint-master/Kint.class.php");
+}
+
 $mc->handleInput();
 
 $view = $mc->generateOutput();

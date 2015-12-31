@@ -34,6 +34,12 @@ class NavigationView
 
     public function onAdminPage()
     {
-        return isset($_GET[\Settings::SECRET_ADMIN_URL]);
+        d($_SERVER["REQUEST_URI"]);
+
+        if (isset($_GET[\Settings::SECRET_ADMIN_URL])) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
