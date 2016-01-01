@@ -18,7 +18,7 @@ class AdminView
     {
         return
 
-            '<h1>Hello admin</h1>
+            '
             <h2>Admin menu</h2>
             <div class="row">
             '.$this->generateTopListForm().'
@@ -29,31 +29,22 @@ class AdminView
     private function generateTopListForm()
     {
         return
-        '<form class="col s12">
-            <div class="row">
-                <div class="col s4">
-                    <input id="'.self::$yearInputID.'" type="text" class="validate">
-                    <label for="'.self::$yearInputID.'">Year</label>
-                </div>
-            </div>
-
+        '<div id="form-messages"></div>
+        <h4>Album search</h4>
+        <form id="album-form" class="col s12" method="post">
             <div class="row">
                 <div class="col s8">
-                    <input id="'.self::$artistInputID.'" type="text" class="validate">
-                    <label for="'.self::$artistInputID.'">Artist</label>
+                    <input id="'.self::$artistInputID.'" name="'.self::$artistInputID.'" type="text" class="validate">
+                    <label for="'.self::$artistInputID.'">Album title</label>
                 </div>
             </div>
-
-            <div class="row">
-                <div class="col s8">
-                    <input id="'.self::$recordInputID.'" type="text" class="validate">
-                    <label for="'.self::$recordInputID.'">Record</label>
-                </div>
-            </div>
-            <button class="btn waves-effect waves light" type="submit" name="'.self::$submitButton.'">Submit
+            <button class="btn waves-effect waves light" type="submit" name="'.self::$submitButton.'">Search
             <i class="material-icons right">send</i>
             </button>
         </form>
+        <div>
+            <ul id="results"></ul>
+        </div>
         ';
     }
 
