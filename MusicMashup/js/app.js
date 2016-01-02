@@ -46,11 +46,12 @@ $(function() {
                 albumMatches.forEach(function(album){
                     var imageSrc = album.image[2]["#text"];
 
+                    // Presentation of search result.
                     $("#result-list").append(
                         "<li class='collection-item avatar'>" +
                         "<img src='"+imageSrc+"' alt='Album cover art' class='circle'>" +
                         "<span class='title'>"+album.name+"</span>" +
-                        "<p>"+album.artist+"</p>" +
+                        "<p class='artist'>"+album.artist+"</p>" +
                         "</li>"
                     );
                 });
@@ -63,14 +64,72 @@ $(function() {
                         "</div>");
                 }
 
+                var albums = [];
+
                 $(".collection-item").click(function(){
 
+                    var listLength = $("#top-albums").children().length;
+                    var albumNumber = 3 - listLength;
                     var albumListItem = this;
 
+                    var albumName = $(albumListItem).children(".title").text();
+                    var artist = $(albumListItem).children(".artist").text();
 
-                    $("#top-albums").append(albumListItem);
+                    //console.log(artist);
 
-                    console.log($("#top-albums").children().length);
+                    var listItemClone = $(albumListItem).clone();
+
+                    listItemClone.appendTo("#top-albums");
+
+                    $(listItemClone).append("<span class='album-order-number'>"+albumNumber+"</span>");
+
+                    var album = {
+                        name: albumName
+                    };
+
+                    //var json = JSON.stringify(album);
+
+                    //$.post("models/test.php", { json: JSON.stringify(album) }, function(response){
+                    //    console.log(response);
+                    //});
+
+                    $.ajax({
+                        type: 'POST',
+                        url: 'index.php',
+                        data: {json: JSON.stringify(album)},
+                        dataType: 'json'
+                    }).done(function(response){
+                        console.log("done");
+                        console.log(response);
+                    }).fail(function(data){
+                        console.log("fail");
+                        console.log(data);
+                    });
+
+
+                    //$(".content").append("" +
+                    //    "<form id='top-list-form' method='post' action='models/test.php'>" +
+                    //        "<input type='text' id='name' name='name' value='"+album.name+"'>" +
+                    //        "<button type='submit'>Send</button>" +
+                    //    "</form>");
+                    //
+                    //
+                    //
+                    //$("#top-list-form").submit(function(e){
+                    //    e.preventDefault();
+                    //
+                    //    var formData = $("#top-list-form").serialize();
+                    //
+                    //    console.log(formData);
+                    //
+                    //    $.ajax({
+                    //        type: 'POST',
+                    //        url: $("#top-list-form").attr("action"),
+                    //        data: formData
+                    //    }).done(function(response){
+                    //        console.log(response);
+                    //    });
+                    //});
                 });
             }
         });

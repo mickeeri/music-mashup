@@ -4,6 +4,11 @@ require_once ("Settings.php");
 require_once ("controllers/MasterController.php");
 require_once ("views/NavigationView.php");
 require_once ("views/LayoutView.php");
+require_once ("models/test.php");
+
+$directions = json_decode($_POST['json']);
+var_dump($directions);
+
 
 $nv = new \views\NavigationView();
 $mc = new \controllers\MasterController($nv);
