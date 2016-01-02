@@ -26,13 +26,12 @@ class LayoutView
 		        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 		  	</head>
 	      	<body>
+				<header>
+                    ' . $nv->getNavigationBar() . '
+                </header>
 				<div class="container">
-					<h1>My Record Collection</h1>
-					' . $nv->getNavigationBar() . '
-					<div class="content">
 					' . $nv->getHeaderMessage() . '
 		            ' . $view->response() . '
-		            </div>
 		        </div>
                 <script type="text/javascript" src="//code.jquery.com/jquery-2.1.1.min.js"></script>
 		        <script src="//cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>

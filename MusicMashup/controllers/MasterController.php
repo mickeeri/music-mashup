@@ -24,8 +24,6 @@ class MasterController
 
             $this->view = new \views\AdminView();
             //$controller = new \controllers\AdminController($this->view, $this->$this->navigationView);
-
-            var_dump($this->view->onNewListPage());
         }
 
         else {
