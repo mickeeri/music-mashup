@@ -48,7 +48,7 @@ $(function() {
 
                     // Presentation of search result.
                     $("#result-list").append(
-                        "<li class='collection-item avatar'>" +
+                        "<li class='collection-item avatar top-album'>" +
                         "<img src='"+imageSrc+"' alt='Album cover art' class='circle'>" +
                         "<span class='title'>"+album.name+"</span>" +
                         "<p class='artist'>"+album.artist+"</p>" +
@@ -64,7 +64,7 @@ $(function() {
                         "</div>");
                 }
 
-                var albums = [];
+                //var albums = [];
 
                 $(".collection-item").click(function(){
 
@@ -83,56 +83,56 @@ $(function() {
 
                     $(listItemClone).append("<span class='album-order-number'>"+albumNumber+"</span>");
 
-                    var album = {
-                        name: albumName
-                    };
 
-                    //var json = JSON.stringify(album);
+                    // TODO: Egen funktion.
+                    if (albumNumber === 3) {
 
-                    //$.post("models/test.php", { json: JSON.stringify(album) }, function(response){
-                    //    console.log(response);
-                    //});
+                        var albums = $("#top-albums").children();
+                        $(".album-list").append("<button id='save-list-button'>Save</button>");
 
-                    $.ajax({
-                        type: 'POST',
-                        url: 'index.php',
-                        data: {json: JSON.stringify(album)},
-                        dataType: 'json'
-                    }).done(function(response){
-                        console.log("done");
-                        console.log(response);
-                    }).fail(function(data){
-                        console.log("fail");
-                        console.log(data);
-                    });
+                        $("#save-list-button").click(function () {
+
+                            console.log(albums);
+
+                            $(albums).each(function () {
+
+                                //console.log($(this).find(".title").text());
+
+                                var name = $(this).find(".title").text();
+                                var artist = $(this).find(".artist").text();
+                                var order = $(this).find(".album-order-number").text();
 
 
-                    //$(".content").append("" +
-                    //    "<form id='top-list-form' method='post' action='models/test.php'>" +
-                    //        "<input type='text' id='name' name='name' value='"+album.name+"'>" +
-                    //        "<button type='submit'>Send</button>" +
-                    //    "</form>");
-                    //
-                    //
-                    //
-                    //$("#top-list-form").submit(function(e){
-                    //    e.preventDefault();
-                    //
-                    //    var formData = $("#top-list-form").serialize();
-                    //
-                    //    console.log(formData);
-                    //
-                    //    $.ajax({
-                    //        type: 'POST',
-                    //        url: $("#top-list-form").attr("action"),
-                    //        data: formData
-                    //    }).done(function(response){
-                    //        console.log(response);
-                    //    });
-                    //});
+
+                                var album = {
+                                    name: name,
+                                    artist: artist,
+                                    order: order
+                                };
+
+                                console.log(album);
+
+                                $.post("models/AjaxHandler.php", album).done(function(data){
+                                    console.log("Done");
+                                    console.log(data);
+                                }).fail(function(data){
+                                    console.log("fail");
+                                    console.log(data);
+                                });
+                            });
+                        });
+                    }
                 });
             }
+        }).done(function(response){
+            console.log("Done: " + response)
+        }).fail(function (response) {
+            console.log("Fail: " + response);
         });
 
     });
+
+
 });
+
+
