@@ -14,6 +14,10 @@ class MasterController
 
     public function __construct(\views\NavigationView $nv)
     {
+        // Setting up database
+        $db = new PDO('mysql:host=localhost;dbname=testdb;charset=utf8', 'username', 'password', array(PDO::ATTR_EMULATE_PREPARES => false,
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION));
+
         $this->navigationView = $nv;
     }
 

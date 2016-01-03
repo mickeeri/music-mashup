@@ -16,8 +16,6 @@ $(function() {
         // Serialize the form data.
         var artist = $("#artist").val();
 
-        //console.log(artist);
-
         var url = "http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist="+artist+"&" +
             "lang=sv&api_key=c3ec843b6b80acb1bf180a874a95cf59&format=json";
 
