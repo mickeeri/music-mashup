@@ -58,6 +58,7 @@ $(function() {
 
                     $(".content").append("<div class='album-list'>" +
                         "<h4>Top albums</h4>" +
+                        "<div id='save-message'></div>" +
                         "<ul id='top-albums' class='collection'></ul>" +
                         "</div>");
                 }
@@ -83,23 +84,25 @@ $(function() {
 
 
                     // TODO: Egen funktion.
-                    if (albumNumber === 3) {
+                    if (albumNumber === 2) {
 
-                        var albums = $("#top-albums").children();
+                        var albumListItems = $("#top-albums").children().toArray();
                         $(".album-list").append("<button id='save-list-button'>Save</button>");
 
+
+                        console.log(albumListItems);
+
+                        // When user is done with list and presses save.
                         $("#save-list-button").click(function () {
 
-                            console.log(albums);
+                            // The albums in the list are extracted and saved as objects in array.
+                            var topAlbums = [];
 
-                            $(albums).each(function () {
-
-                                //console.log($(this).find(".title").text());
+                            $(albumListItems).each(function () {
 
                                 var name = $(this).find(".title").text();
                                 var artist = $(this).find(".artist").text();
                                 var order = $(this).find(".album-order-number").text();
-
 
 
                                 var album = {
@@ -108,24 +111,49 @@ $(function() {
                                     order: order
                                 };
 
-                                console.log(album);
+                                topAlbums.push(album);
 
-                                $.post("models/AjaxHandler.php", album).done(function(data){
-                                    console.log("Done");
-                                    console.log(data);
-                                }).fail(function(data){
-                                    console.log("fail");
-                                    console.log(data);
-                                });
+                            });
+
+                            var albumOfTheYearList = {
+                                year: "2105",
+                                source: "Pitchfork",
+                                albums: topAlbums
+                            };
+
+                            console.log(JSON.stringify(albumOfTheYearList));
+
+                            var messageDiv = $("#save-message");
+
+                            $.post("models/AjaxHandler.php", albumOfTheYearList).done(function(response){
+
+                                $(messageDiv).removeClass("error");
+                                $(messageDiv).addClass("success");
+
+                                $(messageDiv).text(response);
+
+                                // TODO: clear list.
+
+                            }).fail(function(response){
+
+                                $(messageDiv).removeClass("success");
+                                $(messageDiv).addClass("error");
+
+                                if (response.responseText !== "") {
+                                    $(messageDiv).text(response.responseText);
+                                } else {
+                                    $(messageDiv).text("An error occurred, please try again.");
+                                }
+
                             });
                         });
                     }
                 });
             }
         }).done(function(response){
-            console.log("Done: " + response)
+            //console.log("Done: " + response)
         }).fail(function (response) {
-            console.log("Fail: " + response);
+            //console.log("Fail: " + response);
         });
 
     });
