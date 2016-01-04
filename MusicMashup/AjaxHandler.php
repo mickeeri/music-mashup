@@ -1,8 +1,10 @@
 <?php
 
-require_once ("AlbumsOfTheYearList.php");
-require_once ("Facade.php");
-require_once ("Album.php");
+require_once("models/AlbumsOfTheYearList.php");
+require_once("models/Facade.php");
+require_once("models/Album.php");
+require_once("models/AlbumListDAL.php");
+require_once ("Settings.php");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -30,16 +32,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $yearList = new \models\AlbumsOfTheYearList($year, $source, $albumsAsPHPObjects);
 
-    $facade = new \models\Facade();
+    //var_dump($yearList);
 
-    $facade->addList($yearList);
 
-    echo "Your list has been saved";
+    try {
+        $facade = new \models\Facade();
+        $facade->saveList($yearList);
+    } catch (\Exception $e) {
+        echo $e;
+    }
 
-} else {
-    // Not a POST request, set a 403 (forbidden) response code.
-    http_response_code(403);
-    echo "There was a problem, please try again.";
+
+    //echo "Your list has been saved";
+
 }
 
 

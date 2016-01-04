@@ -24,6 +24,8 @@ $(function() {
 
         $.getJSON(albumurl, function(data){
 
+            // TODO escape response.
+
             var albumMatches = data.results.albummatches.album;
 
             var resultsDiv = $("#results");
@@ -58,7 +60,7 @@ $(function() {
 
                     $(".content").append("<div class='album-list'>" +
                         "<h4>Top albums</h4>" +
-                        "<div id='save-message'></div>" +
+                        "<div id='save-message' style='display: none;'></div>" +
                         "<ul id='top-albums' class='collection'></ul>" +
                         "</div>");
                 }
@@ -90,8 +92,6 @@ $(function() {
                         $(".album-list").append("<button id='save-list-button'>Save</button>");
 
 
-                        console.log(albumListItems);
-
                         // When user is done with list and presses save.
                         $("#save-list-button").click(function () {
 
@@ -117,34 +117,55 @@ $(function() {
 
                             var albumOfTheYearList = {
                                 year: "2105",
-                                source: "Pitchfork",
+                                source: "Rough Trade",
                                 albums: topAlbums
                             };
 
-                            console.log(JSON.stringify(albumOfTheYearList));
+                            //console.log(JSON.stringify(albumOfTheYearList));
+
+
+                           // "<div id='save-message'></div>" +
+
+                            //$(".album-list").prepend("<div id='save-message'></div>");
 
                             var messageDiv = $("#save-message");
 
-                            $.post("models/AjaxHandler.php", albumOfTheYearList).done(function(response){
+
+                            $.post("AjaxHandler.php", albumOfTheYearList).done(function(response){
 
                                 $(messageDiv).removeClass("error");
                                 $(messageDiv).addClass("success");
 
-                                $(messageDiv).text(response);
+                                $(messageDiv).text("List saved without problem!");
 
                                 // TODO: clear list.
 
                             }).fail(function(response){
 
+                                console.log("fail");
+
                                 $(messageDiv).removeClass("success");
                                 $(messageDiv).addClass("error");
 
                                 if (response.responseText !== "") {
-                                    $(messageDiv).text(response.responseText);
+                                    $(messageDiv).text("The following error occurred: " + response.responseText);
                                 } else {
                                     $(messageDiv).text("An error occurred, please try again.");
                                 }
 
+                            }).always(function (response) {
+
+                                $(messageDiv).show("fast");
+                                $(messageDiv).click(function () {
+                                    $(this).hide("fast");
+                                });
+
+
+                                if (response.responseText !== "") {
+                                    $(messageDiv).text(response.responseText);
+                                }
+
+                                // TODO: om det inte är response.status 200.
                             });
                         });
                     }

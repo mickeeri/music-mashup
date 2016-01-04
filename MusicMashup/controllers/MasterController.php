@@ -25,13 +25,15 @@ class MasterController
 
         if ($this->navigationView->onAdminPage()) {
 
-            $this->view = new \views\AdminView();
             $controller = new \controllers\AdminController();
+            $this->view = $controller->getAdminView();
         }
 
         else {
             $this->view = new \views\HomeView();
         }
+
+        // TODO: close db.
     }
 
     public function generateOutput()

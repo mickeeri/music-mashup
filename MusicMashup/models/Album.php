@@ -7,6 +7,7 @@ class Album
 {
     private $name;
     private $artist;
+    private $order;
 
     /**
      * Album constructor.
@@ -31,6 +32,11 @@ class Album
     public function getArtist()
     {
         return $this->artist;
+    }
+
+    public function getOrder()
+    {
+        return $this->order;
     }
 
 }
