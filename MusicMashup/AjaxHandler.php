@@ -1,5 +1,6 @@
 <?php
 
+// TODO: behöver jag alla dessa, behöver jag då dem i index.php?
 require_once("models/AlbumsOfTheYearList.php");
 require_once("models/Facade.php");
 require_once("models/Album.php");
@@ -10,6 +11,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $year = $_POST["year"];
     $source = $_POST["source"];
+    $link = $_POST["link"];
     $albums = $_POST["albums"];
 
 
@@ -25,12 +27,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $albumsAsPHPObjects = array();
 
     foreach ($albums as $album) {
-
         array_push($albumsAsPHPObjects, new \models\Album($album["name"], $album["artist"], $album["order"]));
-
     }
 
-    $yearList = new \models\AlbumsOfTheYearList($year, $source, $albumsAsPHPObjects);
+    $yearList = new \models\AlbumsOfTheYearList($year, $source, $link, $albumsAsPHPObjects);
 
     //var_dump($yearList);
 

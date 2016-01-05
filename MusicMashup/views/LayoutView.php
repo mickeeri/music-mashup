@@ -26,17 +26,21 @@ class LayoutView
 		        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 		  	</head>
 	      	<body>
-				<header>
-                    ' . $nv->getNavigationBar() . '
-                </header>
 				<div class="container">
-					' . $nv->getHeaderMessage() . '
-		            ' . $view->response() . '
+				    <div class="row">
+				        <div class="col s12 m10 offset-m1">
+                            <header>
+                                ' . $nv->getNavigationBar() . '
+                            </header>
+                            <main>
+                                ' . $view->response() . '
+                            </main>
+                        </div>
+                    </div>
 		        </div>
                 <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
 		        <script src="//cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
                 <script type="text/javascript" src="js/AlbumListMaker.js"></script>
-                <script type="text/javascript" src="js/albumpost.js"></script>
 	       	</body>
 	    </html>
 	  	';

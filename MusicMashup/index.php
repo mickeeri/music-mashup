@@ -5,7 +5,7 @@ require_once ("controllers/MasterController.php");
 require_once ("views/NavigationView.php");
 require_once ("views/LayoutView.php");
 
-require_once("AjaxHandler.php");
+//require_once("AjaxHandler.php");
 
 
 if ($_SERVER["HTTP_HOST"] === "localhost:8888") {
@@ -14,7 +14,10 @@ if ($_SERVER["HTTP_HOST"] === "localhost:8888") {
     ini_set('display_errors', 'ON');
 }
 
-
+if (Settings::DISPLAY_ERRORS) {
+    error_reporting(-1);
+    ini_set('display_errors', 'ON');
+}
 
 
 $nv = new \views\NavigationView();

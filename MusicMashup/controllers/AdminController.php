@@ -3,7 +3,7 @@
 namespace controllers;
 
 //require_once ("models/AlbumListDAL.php");
-//require_once ("models/Facade.php");
+//require_once ("models/AjaxAjaxFacade.php");
 
 
 class AdminController

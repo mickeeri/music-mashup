@@ -6,12 +6,22 @@ function init(){
 
 var AlbumListMaker = function(){
 
+    // TODO: Gör så att markören hamnar i input-fältet. t.ex. när man lagt in år och sånt.
+
     var createListForm = $("#create-list-form");
     var albumSearchForm = $("#album-form");
 
     this.source = "";
     this.year = "";
+    this.link = "";
     this.topAlbums = [];
+
+    // How many albums that is to be in top-list.
+    this.numberOfAlbums = 3;
+
+    $(document).ready(function() {
+        $('select').material_select();
+    });
 
     // Disable search field until source and year is set.
     $("#album-search-field").attr("disabled", true);
@@ -37,6 +47,7 @@ AlbumListMaker.prototype.createList = function(){
 
     var sourceInput = $("#source");
     var yearInput = $("#year");
+    var linkInput = $("#link");
 
     // Assign submitted values.
     if (sourceInput.val() !== "" || yearInput.val() !== "") {
@@ -45,15 +56,19 @@ AlbumListMaker.prototype.createList = function(){
 
         this.source = sourceInput.val();
         this.year = yearInput.val();
+        this.link = linkInput.val();
 
         // Disable inputs after submit;
         sourceInput.attr("disabled", true);
         yearInput.attr("disabled", true);
+        linkInput.attr("disabled", true);
         $("#createListButton").attr("disabled", true);
 
         // Active search form.
         $("#album-search-field").attr("disabled", false);
         $("#album-search-button").attr("disabled", false);
+
+        $("#album-li-"+this.numberOfAlbums).addClass("active-li");
 
     } else {
         var messageDiv = $("#create-list-message");
@@ -72,6 +87,8 @@ AlbumListMaker.prototype.createList = function(){
 };
 
 AlbumListMaker.prototype.findAlbums = function () {
+
+
 
     var searchQuery = $("#album-search-field").val();
 
@@ -92,18 +109,21 @@ AlbumListMaker.prototype.findAlbums = function () {
         resultsDiv.empty();
 
         if (albumMatches.length === 0) {
-            resultsDiv.append("" +
+            resultsDiv.append(
                 "<h4>Search results</h4>" +
-                "<p>No albums found</p>");
+                "<p>No albums found</p>"
+            );
         } else {
             displayResults();
         }
 
         function displayResults(){
 
-            resultsDiv.append("" +
-                "<div class='col m6'>" +
+            // TODO: highlight li that is about to be selected.
+            resultsDiv.append(
+                "<div class='col s12 m6 offset-m3'>" +
                     "<h4>Search results</h4>" +
+                    "<p>Click to select album for place "+that.numberOfAlbums+".</p>" +
                     "<ul id='result-list' class='collection'></ul>" +
                 "</div>"
             );
@@ -113,7 +133,7 @@ AlbumListMaker.prototype.findAlbums = function () {
                 var imageSrc = album.image[2]["#text"];
                 // Presentation of search result.
                 $("#result-list").append(
-                    "<li class='collection-item avatar top-album'>" +
+                    "<li class='collection-item avatar search-result-li'>" +
                         "<img src='"+imageSrc+"' alt='Album cover art' class='circle'>" +
                         "<span class='title'>"+album.name+"</span>" +
                         "<p class='artist'>"+album.artist+"</p>" +
@@ -126,38 +146,68 @@ AlbumListMaker.prototype.findAlbums = function () {
 
         function createTopAlbumsList(){
 
-            if ($(".album-list").length === 0) {
+            //if ($(".album-list").length === 0) {
+            //
+            //    $("#results").append(
+            //        "<div class='row'>" +
+            //            "<div class='album-list col s12 m12'>" +
+            //                "<h4>Top albums for "+that.source+" ("+that.year+")</h4>" +
+            //                "<div id='save-message' style='display: none;'></div>" +
+            //                "<ul id='top-albums' class='collection'></ul>" +
+            //            "</div>" +
+            //        "</div>"
+            //    );
+            //}
 
-                $(".content").append("<div class='album-list'>" +
-                    "<h4>Top albums for "+that.source+" ("+that.year+")</h4>" +
-                        "<div id='save-message' style='display: none;'></div>" +
-                        "<ul id='top-albums' class='collection'></ul>" +
-                    "</div>"
-                );
-            }
+            //console.log(that.numberOfAlbums);
+
+
+
 
             // Event handler for album select.
-            $(".collection-item").click(function () {
+            $(".search-result-li").click(function () {
+
                 addAlbumToList(this);
+
+                // TODO: make search results go away after choosing one album.
+
+                $("#album-li-"+that.numberOfAlbums).removeClass("active-li");
+                that.numberOfAlbums--;
+                $("#album-li-"+that.numberOfAlbums).addClass("active-li");
             });
 
         }
 
         function addAlbumToList(selectedAlbum){
 
-            var listLength = $("#top-albums").children().length;
-            var albumNumber = 3 - listLength;
+            var albumNumber = that.numberOfAlbums;
 
-            var albumName = $(selectedAlbum).children(".title").text();
-            var artist = $(selectedAlbum).children(".artist").text();
+            var albumName = $(selectedAlbum).children(".title").clone();
+            var artist = $(selectedAlbum).children(".artist").clone();
+            var cover = $(selectedAlbum).children("img").clone();
 
-            // Clones list item and adds to list of selected albums.
-            var listItemClone = $(selectedAlbum).clone();
-            listItemClone.appendTo("#top-albums");
-            $(listItemClone).append("<span class='album-order-number'>"+albumNumber+"</span>");
+            var listItem = $("#album-li-"+albumNumber);
+
+            listItem.append(cover);
+            listItem.append(albumName);
+            listItem.append(artist);
+
+            console.log(albumNumber);
 
             // If the list is finished.
             if (albumNumber === 1) {
+
+                var messageDiv = $("#save-message");
+
+                // TODO: egen metod för meddelande.
+                $(messageDiv).removeClass("error");
+                $(messageDiv).addClass("success");
+                $(messageDiv).text("All albums added. Press 'Save my list' to submit.");
+                // Displays feedback message.
+                $(messageDiv).show("fast");
+                $(messageDiv).click(function () {
+                    $(this).hide("fast");
+                });
 
                 // Disable search fields.
                 $("#album-search-field").attr("disabled", true);
@@ -166,10 +216,12 @@ AlbumListMaker.prototype.findAlbums = function () {
 
                 // Array of selected albums as list items.
                 var selectedAlbums = $("#top-albums").children().toArray();
-                $(".album-list").append("<button id='save-list-button' class='waves-effect waves-light btn'>Save my list</button>");
+                $("#album-list-div").append("<button id='save-list-button' class='waves-effect waves-light btn right'>Save my list</button>");
 
                 // When user is done with list and presses save.
                 $("#save-list-button").click(function () {
+                    // TODO: Rensa
+
                     that.getTopAlbums(selectedAlbums);
                 });
             }
@@ -224,6 +276,7 @@ AlbumListMaker.prototype.saveList = function () {
     var albumOfTheYearList = {
         year: this.year,
         source: this.source,
+        link: this.link,
         albums: this.topAlbums
     };
 

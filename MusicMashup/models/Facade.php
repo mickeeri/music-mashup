@@ -26,7 +26,7 @@ class Facade
      * @param AlbumsOfTheYearList $list
      */
     public function saveList(AlbumsOfTheYearList $list)
-   {
+    {
        try {
 
            $this->dal->addList($list);
@@ -38,6 +38,15 @@ class Facade
            http_response_code(500);
            echo $e->getMessage();
        }
-   }
+    }
+
+    /**
+     * Returns the years in the db.
+     */
+    public function getYears(){
+        return $this->dal->getYears();
+    }
+
+
 
 }
