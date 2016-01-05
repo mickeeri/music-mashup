@@ -38,7 +38,7 @@ body {
 }
 
 /* Success/Error Messages */
-#save-message {
+#save-message, #create-list-message {
     padding: 20px;
     border: 1px solid #B0BEC5;
     margin-bottom: 20px;
