@@ -5,9 +5,10 @@ namespace models;
 
 class Album
 {
+    private $albumID;
     private $name;
     private $artist;
-    private $order;
+    private $position;
 
     /**
      * Album constructor.
@@ -17,11 +18,16 @@ class Album
      */
     public function __construct($name, $artist, $order)
     {
-        // TODO: Validera string-lenght och att att order är en siffra mellan 1 och ...
+        // TODO: Validera string-lenght och att att position är en siffra mellan 1 och ...
 
         $this->name = filter_var($name, FILTER_SANITIZE_STRING);
         $this->artist = filter_var($artist, FILTER_SANITIZE_STRING);
-        $this->order = filter_var($order, FILTER_SANITIZE_STRING);
+        $this->position = filter_var($order, FILTER_SANITIZE_STRING);
+    }
+
+    public function setAlbumID($albumID)
+    {
+        $this->albumID = $albumID;
     }
 
     public function getName()
@@ -34,9 +40,9 @@ class Album
         return $this->artist;
     }
 
-    public function getOrder()
+    public function getPosition()
     {
-        return $this->order;
+        return $this->position;
     }
 
 }

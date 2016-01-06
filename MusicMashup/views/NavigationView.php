@@ -6,6 +6,8 @@ namespace views;
 class NavigationView
 {
     private static $sessionSaveLocation = "\\view\\NavigationView\\message";
+    private static $yearURL = "year";
+    private static $listURL = "albumlist";
     private $years;
 
     public function getNavigationBar()
@@ -22,21 +24,6 @@ class NavigationView
             </nav>
         ';
     }
-//
-//    public function getHeaderMessage()
-//    {
-//        if (isset($_SESSION[self::$sessionSaveLocation])) {
-//
-//            $message = $_SESSION[self::$sessionSaveLocation];
-//            unset($_SESSION[self::$sessionSaveLocation]);
-//
-//            return '
-//			<div class="alert alert-success" role="alert">
-//				' . $message . '
-//			</div>
-//			';
-//        }
-//    }
 
     public function onAdminPage()
     {
@@ -46,6 +33,26 @@ class NavigationView
         } else {
             return false;
         }
+    }
+
+    public function onYearPage()
+    {
+        return isset($_GET[self::$yearURL]);
+    }
+
+    public function onAlbumListPage()
+    {
+        return $_GET[self::$listURL];
+    }
+
+    public function getYearToShow()
+    {
+        return $_GET[self::$yearURL];
+    }
+
+    public function getAlbumsToShow()
+    {
+        return $_GET[self::$listURL];
     }
 
     public function setYears($years)
@@ -58,7 +65,7 @@ class NavigationView
         $ret = "";
 
         foreach ($this->years as $year) {
-            $ret .= '<li><a href="'.$year.'">'.$year.'</a></li>';
+            $ret .= '<li><a href="?'.self::$yearURL.'='.$year.'">'.$year.'</a></li>';
         }
 
         return $ret;

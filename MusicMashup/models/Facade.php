@@ -43,8 +43,19 @@ class Facade
     /**
      * Returns the years in the db.
      */
-    public function getYears(){
+    public function getYears()
+    {
         return $this->dal->getYears();
+    }
+
+    public function getListsForYear($year)
+    {
+        return $this->dal->getListsForYear($year);
+    }
+
+    public function getListByID($listID)
+    {
+        return $this->dal->getListByID($listID);
     }
 
 

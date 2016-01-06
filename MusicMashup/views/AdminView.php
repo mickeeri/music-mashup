@@ -92,13 +92,13 @@ class AdminView
                 <div id="save-message" style="display: none;"></div>
                 <ul id="top-albums" class="collection">
                     <li id="album-li-1" class="collection-item avatar top-album">
-                        <span class="album-order-number">1</span>
+                        <span class="album-position-number">1</span>
                     </li>
                     <li id="album-li-2" class="collection-item avatar top-album">
-                        <span class="album-order-number">2</span>
+                        <span class="album-position-number">2</span>
                     </li>
                     <li id="album-li-3" class="collection-item avatar top-album">
-                        <span class="album-order-number">3</span>
+                        <span class="album-position-number">3</span>
                     </li>
                 </ul>
             </div>

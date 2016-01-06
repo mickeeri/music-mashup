@@ -18,6 +18,8 @@ class AlbumListDAL
 
     public function addList(\models\AlbumsOfTheYearList $list)
     {
+        // TODO: try catch i varje metod.
+
 
         $stmt = $this->db->prepare("INSERT INTO albumlist (year, source, link) values (:year, :source, :link)");
         $stmt->bindParam(":year", $list->getYear());
@@ -40,7 +42,7 @@ class AlbumListDAL
             $stmt = $this->db->prepare("INSERT INTO album (name, artist, position, listID) values (:name, :artist, :position, :listID)");
             $stmt->bindParam(":name", $album->getName());
             $stmt->bindParam(":artist", $album->getArtist());
-            $stmt->bindParam(":position", $album->getOrder());
+            $stmt->bindParam(":position", $album->getPosition());
             $stmt->bindParam(":listID", intval($listID));
             $stmt->execute();
         }
@@ -60,5 +62,66 @@ class AlbumListDAL
 
         return $years;
     }
+
+    public function getListsForYear($year)
+    {
+        $stmt = $this->db->query('SELECT listID, year, source, link FROM albumlist WHERE year = '.$year);
+        //$stmt->bindParam(':year', $year);
+        $stmt->setFetchMode(\PDO::FETCH_ASSOC);
+
+        $lists = array();
+
+        while($row = $stmt->fetch())
+        {
+            $listID = $row['listID'];
+            $y = $row['year'];
+            $source = $row['source'];
+            $link = $row['link'];
+            $albums = $this->getAlbumsByListID($listID);
+
+            $list = new \models\AlbumsOfTheYearList($y, $source, $link, $albums);
+            $list->setListID($listID);
+
+            array_push($lists, $list);
+
+        }
+
+        return $lists;
+    }
+
+    public function getListByID($listID)
+    {
+        $stmt = $this->db->query('SELECT listID, year, source, link FROM albumlist WHERE listID = '.$listID);
+        $stmt->setFetchMode(\PDO::FETCH_OBJ);
+        $row = $stmt->fetch();
+        $albums = $this->getAlbumsByListID($row->listID);
+        $list = new \models\AlbumsOfTheYearList($row->year, $row->source, $row->link, $albums);
+        $list->setListID($listID);
+        return $list;
+    }
+
+    private function getAlbumsByListID($listID)
+    {
+        $stmt = $this->db->query('SELECT albumID, name, artist, position FROM album WHERE listID = '.$listID.' ORDER BY position ASC');
+        $stmt->setFetchMode(\PDO::FETCH_ASSOC);
+
+        $albums = array();
+
+        while ($row = $stmt->fetch()) {
+            $albumID = $row['albumID'];
+            $name = $row['name'];
+            $artist = $row['artist'];
+            $position = $row['position'];
+
+            $album = new \models\Album($name, $artist, $position);
+            $album->setAlbumID($albumID);
+
+            array_push($albums, $album);
+        }
+
+        return $albums;
+    }
+
+
 
 }

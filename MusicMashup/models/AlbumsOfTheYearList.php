@@ -5,10 +5,11 @@ namespace models;
 
 class AlbumsOfTheYearList
 {
+    private $listID;
     private $year;
     private $source;
     private $link;
-    private $albums;
+    private $albums = array();
 
     /**
      * AlbumsOfTheYearList constructor.
@@ -27,20 +28,38 @@ class AlbumsOfTheYearList
         $this->albums = $albums;
     }
 
-    public function getYear(){
+    public function setListID($listID)
+    {
+        if ($listID !== null && is_numeric($listID) === false) {
+            throw new \Exception("Unvalid ID.");
+        }
+
+        $this->listID = $listID;
+    }
+
+    public function getYear()
+    {
         return $this->year;
     }
 
-    public function getSource(){
+    public function getSource()
+    {
         return $this->source;
     }
 
-    public function getLink(){
+    public function getLink()
+    {
         return $this->link;
     }
 
-    public function getAlbums(){
+    public function getAlbums()
+    {
         return $this->albums;
+    }
+
+    public function getListID()
+    {
+        return $this->listID;
     }
 
 }

@@ -5,11 +5,17 @@ namespace controllers;
 // Views
 require_once ("views/HomeView.php");
 require_once ("views/AdminView.php");
+require_once ("views/AlbumListView.php");
+
+
+
 require_once ("models/Facade.php");
 require_once ("models/AlbumListDAL.php");
 
 // Controllers
 require_once ("controllers/AdminController.php");
+require_once ("controllers/HomeController.php");
+require_once ("controllers/ListController.php");
 
 class MasterController
 {
@@ -34,11 +40,23 @@ class MasterController
             $this->view = $controller->getAdminView();
         }
 
+        elseif ($this->navigationView->onYearPage()) {
+
+            $this->view = new \views\ListView();
+            $controller = new \controllers\ListController($this->view,$this->navigationView, $this->facade);
+            $controller->provideLists();
+        }
+
+        elseif ($this->navigationView->onAlbumListPage()) {
+            $this->view = new \views\AlbumListView();
+            $controller = new \controllers\ListController($this->view,$this->navigationView, $this->facade);
+            $controller->provideAlbumList();
+        }
+
         else {
             // TODO homecontroller.
-
+            //$controller = new \controllers\HomeController($this->facade, $this->navigationView);
             $this->view = new \views\HomeView();
-            //$this->view->setYears($this->facade->getYears());
         }
 
         // TODO: close db.

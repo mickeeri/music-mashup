@@ -27,7 +27,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $albumsAsPHPObjects = array();
 
     foreach ($albums as $album) {
-        array_push($albumsAsPHPObjects, new \models\Album($album["name"], $album["artist"], $album["order"]));
+        array_push($albumsAsPHPObjects, new \models\Album($album["name"], $album["artist"], $album["position"]));
     }
 
     $yearList = new \models\AlbumsOfTheYearList($year, $source, $link, $albumsAsPHPObjects);

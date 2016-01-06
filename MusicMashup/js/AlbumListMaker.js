@@ -104,6 +104,8 @@ AlbumListMaker.prototype.findAlbums = function () {
         // TODO escape response.
         var albumMatches = data.results.albummatches.album;
 
+
+
         var resultsDiv = $("#results");
 
         resultsDiv.empty();
@@ -252,12 +254,12 @@ AlbumListMaker.prototype.getTopAlbums = function (selectedAlbums) {
 
         var name = $(this).find(".title").text();
         var artist = $(this).find(".artist").text();
-        var order = $(this).find(".album-order-number").text();
+        var position = $(this).find(".album-position-number").text();
 
         var album = {
             name: name,
             artist: artist,
-            order: order
+            position: position
         };
 
         that.topAlbums.push(album);
