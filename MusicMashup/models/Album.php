@@ -2,6 +2,8 @@
 
 namespace models;
 
+require_once ("models/WebServiceModel.php");
+
 
 class Album
 {
@@ -9,20 +11,47 @@ class Album
     private $name;
     private $artist;
     private $position;
+    private $cover;
+
+    private $tracks;
 
     /**
      * Album constructor.
      * @param string $name
      * @param string $artist
-     * @param string $order
+     * @param string $position
+     * @param $cover
      */
-    public function __construct($name, $artist, $order)
+    public function __construct($name, $artist, $position, $cover)
     {
         // TODO: Validera string-lenght och att att position är en siffra mellan 1 och ...
 
         $this->name = filter_var($name, FILTER_SANITIZE_STRING);
         $this->artist = filter_var($artist, FILTER_SANITIZE_STRING);
-        $this->position = filter_var($order, FILTER_SANITIZE_STRING);
+        $this->position = filter_var($position, FILTER_SANITIZE_STRING);
+
+
+        // If no cover scr is provided, fetch one from api.
+        if ($cover === "" || $cover === null) {
+            // Using other api method to get more info about album.
+            $additionalAlbumInfo = $this->getContentFromWebService();
+
+            // Returns default img if not set.
+            if (!isset($additionalAlbumInfo->album)) {
+                $this->cover = $additionalAlbumInfo;
+            } else {
+                $this->cover = filter_var($additionalAlbumInfo->album->image[2]->{"#text"}, FILTER_SANITIZE_STRING);
+            }
+
+        } else {
+            $this->cover = $cover;
+        }
+    }
+
+    private function getContentFromWebService()
+    {
+        $wsm = new \models\WebServiceModel();
+        return $wsm->getAlbumInfo($this->artist, $this->name);
     }
 
     public function setAlbumID($albumID)
@@ -43,6 +72,11 @@ class Album
     public function getPosition()
     {
         return $this->position;
+    }
+
+    public function getCover()
+    {
+        return $this->cover;
     }
 
 }

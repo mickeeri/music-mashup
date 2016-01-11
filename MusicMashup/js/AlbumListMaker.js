@@ -17,7 +17,7 @@ var AlbumListMaker = function(){
     this.topAlbums = [];
 
     // How many albums that is to be in top-list.
-    this.numberOfAlbums = 3;
+    this.numberOfAlbums = 5;
 
     $(document).ready(function() {
         $('select').material_select();
@@ -110,14 +110,16 @@ AlbumListMaker.prototype.findAlbums = function () {
 
         resultsDiv.empty();
 
-        if (albumMatches.length === 0) {
-            resultsDiv.append(
-                "<h4>Search results</h4>" +
-                "<p>No albums found</p>"
-            );
-        } else {
-            displayResults();
-        }
+        displayResults();
+
+        //if (albumMatches.length === 0) {
+        //    resultsDiv.append(
+        //        "<h4>Search results</h4>" +
+        //        "<p>No albums found</p>"
+        //    );
+        //} else {
+        //    displayResults();
+        //}
 
         function displayResults(){
 
@@ -129,6 +131,8 @@ AlbumListMaker.prototype.findAlbums = function () {
                     "<ul id='result-list' class='collection'></ul>" +
                 "</div>"
             );
+
+
 
             // Render search result.
             albumMatches.forEach(function(album){
@@ -142,6 +146,8 @@ AlbumListMaker.prototype.findAlbums = function () {
                     "</li>"
                 );
             });
+
+            $("#results").show("slow");
 
             createTopAlbumsList();
         }
@@ -170,6 +176,20 @@ AlbumListMaker.prototype.findAlbums = function () {
             $(".search-result-li").click(function () {
 
                 addAlbumToList(this);
+
+                $("#results").hide("slow");
+
+                var messageDiv = $("#save-message");
+
+                // TODO: egen metod för meddelande.
+                $(messageDiv).removeClass("error");
+                $(messageDiv).addClass("success");
+                $(messageDiv).text("Album added");
+                // Displays feedback message.
+                $(messageDiv).show("fast");
+                $(messageDiv).click(function () {
+                    $(this).hide("fast");
+                });
 
                 // TODO: make search results go away after choosing one album.
 
@@ -254,7 +274,7 @@ AlbumListMaker.prototype.getTopAlbums = function (selectedAlbums) {
 
         var name = $(this).find(".title").text();
         var artist = $(this).find(".artist").text();
-        var position = $(this).find(".album-position-number").text();
+        var position = $(this).find(".album-order-number").text();
 
         var album = {
             name: name,
@@ -320,5 +340,4 @@ window.onload = init();
 
 
 // URL for album info.
-//var url = "http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist="+albumName+"&" +
-//    "lang=sv&api_key=c3ec843b6b80acb1bf180a874a95cf59&format=json";
+//var url = "http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist="+albumName+"&lang=sv&api_key=c3ec843b6b80acb1bf180a874a95cf59&format=json";

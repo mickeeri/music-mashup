@@ -42,7 +42,7 @@ class NavigationView
 
     public function onAlbumListPage()
     {
-        return $_GET[self::$listURL];
+        return isset($_GET[self::$listURL]);
     }
 
     public function getYearToShow()

@@ -30,7 +30,7 @@ class AlbumListView
                 '<div class="col s6 m3">
                     <div class="card">
                         <div class="card-image">
-                            <img src="" alt="Album cover for '.$album->getName().'"/>
+                            <img src="'.$album->getCover().'" alt="Album cover for '.$album->getName().'"/>
                         </div>
                         <div class="card-content">
                             <span class="card-title">'.$album->getArtist().'</span>

@@ -2,6 +2,8 @@
 
 namespace models;
 
+require_once ("models/WebServiceModel.php");
+
 
 class AlbumListDAL
 {
@@ -37,12 +39,15 @@ class AlbumListDAL
      */
     public function addAlbumsToList($listID, $albums)
     {
+
         /** @var Album $album */
         foreach ($albums as $album) {
-            $stmt = $this->db->prepare("INSERT INTO album (name, artist, position, listID) values (:name, :artist, :position, :listID)");
+
+            $stmt = $this->db->prepare("INSERT INTO album (name, artist, position, cover, listID) values (:name, :artist, :position, :cover, :listID)");
             $stmt->bindParam(":name", $album->getName());
             $stmt->bindParam(":artist", $album->getArtist());
             $stmt->bindParam(":position", $album->getPosition());
+            $stmt->bindParam(":cover", $album->getCover());
             $stmt->bindParam(":listID", intval($listID));
             $stmt->execute();
         }
@@ -77,9 +82,9 @@ class AlbumListDAL
             $y = $row['year'];
             $source = $row['source'];
             $link = $row['link'];
-            $albums = $this->getAlbumsByListID($listID);
+            //$albums = $this->getAlbumsByListID($listID);
 
-            $list = new \models\AlbumsOfTheYearList($y, $source, $link, $albums);
+            $list = new \models\AlbumsOfTheYearList($y, $source, $link, "");
             $list->setListID($listID);
 
             array_push($lists, $list);
@@ -102,7 +107,7 @@ class AlbumListDAL
 
     private function getAlbumsByListID($listID)
     {
-        $stmt = $this->db->query('SELECT albumID, name, artist, position FROM album WHERE listID = '.$listID.' ORDER BY position ASC');
+        $stmt = $this->db->query('SELECT albumID, name, artist, position, cover FROM album WHERE listID = '.$listID.' ORDER BY position ASC');
         $stmt->setFetchMode(\PDO::FETCH_ASSOC);
 
         $albums = array();
@@ -112,8 +117,16 @@ class AlbumListDAL
             $name = $row['name'];
             $artist = $row['artist'];
             $position = $row['position'];
+            $cover = $row['cover'];
 
-            $album = new \models\Album($name, $artist, $position);
+//            if ($cover === "") {
+//                $webService = new \models\WebServiceModel();
+//                $response = $webService->getAlbumInfo($artist, $name);
+//                $coverURL = filter_var($response->album->image[2]->{"#text"}, FILTER_SANITIZE_STRING);
+//                $this->insertAlbumCover($albumID, $coverURL);
+//            }
+
+            $album = new \models\Album($name, $artist, $position, $cover);
             $album->setAlbumID($albumID);
 
             array_push($albums, $album);
@@ -121,6 +134,14 @@ class AlbumListDAL
 
         return $albums;
     }
+//
+//    private function insertAlbumCover($albumID, $cover)
+//    {
+//        $stmt = $this->db->prepare("UPDATE album SET cover = :cover WHERE albumID = :albumID");
+//        $stmt->bindParam(":cover", $cover);
+//        $stmt->bindParam(":albumID", $albumID);
+//        $stmt->execute();
+//    }
 
 
 

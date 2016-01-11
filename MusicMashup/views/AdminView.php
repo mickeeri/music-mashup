@@ -13,6 +13,7 @@ class AdminView
 //    private static $artistInputID = "artist";
 //    private static $recordInputID = "record";
 //    private static $submitButton = "submit";
+    private $numerOfAlbumsInList = 5;
 
     public function response ()
     {
@@ -79,7 +80,7 @@ class AdminView
                 </form>
             </div>
         </div>
-        <div class="row" id="results"></div>
+        <div class="row" id="results" style="display:none;"></div>
         ';
     }
 
@@ -88,21 +89,28 @@ class AdminView
         return
         '<div class="row">
             <div id="album-list-div" class="col s12 m12">
-                <h4>New list</h4>
+                <h4>New top '.$this->numerOfAlbumsInList.'</h4>
                 <div id="save-message" style="display: none;"></div>
                 <ul id="top-albums" class="collection">
-                    <li id="album-li-1" class="collection-item avatar top-album">
-                        <span class="album-position-number">1</span>
-                    </li>
-                    <li id="album-li-2" class="collection-item avatar top-album">
-                        <span class="album-position-number">2</span>
-                    </li>
-                    <li id="album-li-3" class="collection-item avatar top-album">
-                        <span class="album-position-number">3</span>
-                    </li>
+                    '.$this->generateAlbumListItems().'
                 </ul>
             </div>
         </div>';
+    }
+
+    private function generateAlbumListItems()
+    {
+        $ret = "";
+
+        for ($i = 1; $i <= $this->numerOfAlbumsInList; $i++) {
+            $ret .=
+                '<li id="album-li-'.$i.'" class="collection-item avatar top-albums">
+                    <span class="album-order-number">'.$i.'</span>
+                </li>';
+        }
+
+        return $ret;
+
     }
 
     private function generateYearOptionField(){
