@@ -98,8 +98,12 @@ AlbumListMaker.prototype.findAlbums = function () {
 
     var apiURL = "http://ws.audioscrobbler.com/2.0/?method=album.search&album="+searchQuery+"&limit=3" +
         "&api_key=c3ec843b6b80acb1bf180a874a95cf59&format=json";
+
+    //var apiURL = "https://api.spotify.com/v1/search?q="+searchQuery+"&type=album";
     
     $.getJSON(apiURL, function (data) {
+
+        console.log(data);
 
         // TODO escape response.
         var albumMatches = data.results.albummatches.album;

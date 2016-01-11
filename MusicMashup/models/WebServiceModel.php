@@ -26,7 +26,6 @@ class WebServiceModel
         $result = json_decode($result);
 
         if (isset($result->error) || $result->album->image[2]->{"#text"} == "") {
-
             return "images/default-img.png";
         }
 
@@ -35,7 +34,14 @@ class WebServiceModel
         return $result;
     }
 
-    public function getAlbumFromSpotifyAPI($artist, $albumName)
+    /**
+     * Using spotify api to generate
+     * @param $artist
+     * @param $albumName
+     * @return mixed
+     * @throws \Exception
+     */
+    public function getAlbumSpotifyURI($artist, $albumName)
     {
         $artist = preg_replace('/\s+/', '+', $artist);
         $albumName = preg_replace('/\s+/', '+', $albumName);
@@ -43,15 +49,38 @@ class WebServiceModel
         $url = "https://api.spotify.com/v1/search?q=album:".$albumName."+artist:".$artist."&type=album";
 
         $ch = curl_init();
+
+        if (!$ch){
+            throw new \Exception("Failed to initialize.");
+        }
+
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_URL, $url);
         $result = curl_exec($ch);
-        curl_close($ch);
+
 
         $result = json_decode($result);
 
-        return $result;
+        if (empty($result)) {
+            curl_close($ch);
+            throw new \Exception(curl_error($ch));
+        } else {
+            $info = curl_getinfo($ch);
+            curl_close($ch);
+
+            if ($info["http_code"] !== 200) {
+                throw new \Exception("Fel vid hämtning av album från Spotify.");
+            }
+        }
+
+        $uri = $result->albums->items[0]->uri;
+
+//        if (!$uri) {
+//            throw new \Exception("Kunde inte hitta album på Spotify.");
+//        }
+
+        return $uri;
     }
 
     public function createSpotifyPlayList(){
@@ -81,8 +110,8 @@ class WebServiceModel
         $clientID = "eabdd691d0c44d609a8ce121d358ef02";
         $redirectURI = "http://localhost:8888/1dv449_projekt/MusicMashup/callback/";
 
-        $requestURI = "https://accounts.spotify.com/authorize/?client_id=".$clientID."&response_type=code&redirect_uri=".$redirectURI;
-
+        //$requestURI = "https://accounts.spotify.com/authorize/?client_id=".$clientID."&response_type=code&redirect_uri=".$redirectURI;
+        $requestURI = "https://accounts.spotify.com/api/token";
         //print($requestURI);
 
         $ch = curl_init($requestURI);
@@ -91,23 +120,19 @@ class WebServiceModel
             throw new \Exception("Failed to initialize.");
         }
 
-//        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-//        //curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-//        curl_setopt($ch, CURLOPT_URL, $requestURI);
-//        $result = curl_exec($ch);
-//        curl_close($ch);
+        $bodyParameter = array("grant_type" => "client_credentials");
+        $bodyParameter = json_encode($bodyParameter);
+
+        $ch = curl_init($requestURI);
+        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($ch, CURLOPT_POSTFIELDS, $bodyParameter);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+                'Content-Type: application/json',
+                'Content-Length: ' . strlen($data_string))
+        );
 
 
-        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($ch, CURLOPT_HEADER, true);    // we want headers
-        //curl_setopt($ch, CURLOPT_NOBODY, true);    // we don't need body
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER,1);
-        curl_setopt($ch, CURLOPT_TIMEOUT,10);
-        $output = curl_exec($ch);
-        $httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
-
-        //echo 'HTTP code: ' . $httpcode;
 
         if (false === $output) {
             throw new \Exception(curl_error($ch), curl_errno($ch));

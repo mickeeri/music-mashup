@@ -60,9 +60,8 @@ $testSpotifyAPI = new \models\WebServiceModel();
 //ddd($album);
 
 
-//$lv->renderLayout($nv, $view);
+$lv->renderLayout($nv, $view);
 
-$testSpotifyAPI->requestAuthorizationCode();
 
 
 

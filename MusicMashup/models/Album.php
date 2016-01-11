@@ -12,8 +12,8 @@ class Album
     private $artist;
     private $position;
     private $cover;
-
-    private $tracks;
+    private $spotifyURI;
+    private $webService;
 
     /**
      * Album constructor.
@@ -22,7 +22,7 @@ class Album
      * @param string $position
      * @param $cover
      */
-    public function __construct($name, $artist, $position, $cover)
+    public function __construct($name, $artist, $position, $cover, $spotifyURI)
     {
         // TODO: Validera string-lenght och att att position är en siffra mellan 1 och ...
 
@@ -30,6 +30,13 @@ class Album
         $this->artist = filter_var($artist, FILTER_SANITIZE_STRING);
         $this->position = filter_var($position, FILTER_SANITIZE_STRING);
 
+        $this->webService = new \models\WebServiceModel();
+
+        $this->spotifyURI = $spotifyURI;
+
+        if (!$spotifyURI) {
+            $this->spotifyURI = $this->webService->getAlbumSpotifyURI($this->artist, $this->name);
+        }
 
         // If no cover scr is provided, fetch one from api.
         if ($cover === "" || $cover === null) {
@@ -79,4 +86,8 @@ class Album
         return $this->cover;
     }
 
+    public function getSpotifyURI()
+    {
+        return $this->spotifyURI;
+    }
 }

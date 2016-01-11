@@ -20,17 +20,16 @@ class AlbumListDAL
 
     public function addList(\models\AlbumsOfTheYearList $list)
     {
-        // TODO: try catch i varje metod.
-
-
-        $stmt = $this->db->prepare("INSERT INTO albumlist (year, source, link) values (:year, :source, :link)");
-        $stmt->bindParam(":year", $list->getYear());
-        $stmt->bindParam(":source", $list->getSource());
-        $stmt->bindParam(":link", $list->getLink());
-        $stmt->execute();
-
-        $this->addAlbumsToList($this->db->lastInsertId(), $list->getAlbums());
-
+        try {
+            $stmt = $this->db->prepare("INSERT INTO albumlist (year, source, link) values (:year, :source, :link)");
+            $stmt->bindParam(":year", $list->getYear());
+            $stmt->bindParam(":source", $list->getSource());
+            $stmt->bindParam(":link", $list->getLink());
+            $stmt->execute();
+            $this->addAlbumsToList($this->db->lastInsertId(), $list->getAlbums());
+        } catch (\Exception $e) {
+            echo "Databasfel: ".$e->getMessage();
+        }
     }
 
     /**
@@ -43,13 +42,19 @@ class AlbumListDAL
         /** @var Album $album */
         foreach ($albums as $album) {
 
-            $stmt = $this->db->prepare("INSERT INTO album (name, artist, position, cover, listID) values (:name, :artist, :position, :cover, :listID)");
-            $stmt->bindParam(":name", $album->getName());
-            $stmt->bindParam(":artist", $album->getArtist());
-            $stmt->bindParam(":position", $album->getPosition());
-            $stmt->bindParam(":cover", $album->getCover());
-            $stmt->bindParam(":listID", intval($listID));
-            $stmt->execute();
+            try {
+                $stmt = $this->db->prepare("INSERT INTO album (name, artist, position, cover,  spotifyURI, listID)
+                                      values (:name, :artist, :position, :cover, :spotifyURI, :listID)");
+                $stmt->bindParam(":name", $album->getName());
+                $stmt->bindParam(":artist", $album->getArtist());
+                $stmt->bindParam(":position", $album->getPosition());
+                $stmt->bindParam(":cover", $album->getCover());
+                $stmt->bindParam(":spotifyURI", $album->getSpotifyURI());
+                $stmt->bindParam(":listID", intval($listID));
+                $stmt->execute();
+            } catch (\Exception $e) {
+                echo "Databasfel: ".$e->getMessage();
+            }
         }
     }
 
@@ -107,7 +112,7 @@ class AlbumListDAL
 
     private function getAlbumsByListID($listID)
     {
-        $stmt = $this->db->query('SELECT albumID, name, artist, position, cover FROM album WHERE listID = '.$listID.' ORDER BY position ASC');
+        $stmt = $this->db->query('SELECT albumID, name, artist, position, spotifyURI, cover FROM album WHERE listID = '.$listID.' ORDER BY position ASC');
         $stmt->setFetchMode(\PDO::FETCH_ASSOC);
 
         $albums = array();
@@ -118,15 +123,9 @@ class AlbumListDAL
             $artist = $row['artist'];
             $position = $row['position'];
             $cover = $row['cover'];
+            $spotifyURI = $row['spotifyURI'];
 
-//            if ($cover === "") {
-//                $webService = new \models\WebServiceModel();
-//                $response = $webService->getAlbumInfo($artist, $name);
-//                $coverURL = filter_var($response->album->image[2]->{"#text"}, FILTER_SANITIZE_STRING);
-//                $this->insertAlbumCover($albumID, $coverURL);
-//            }
-
-            $album = new \models\Album($name, $artist, $position, $cover);
+            $album = new \models\Album($name, $artist, $position, $cover, $spotifyURI);
             $album->setAlbumID($albumID);
 
             array_push($albums, $album);

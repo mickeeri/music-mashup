@@ -27,21 +27,34 @@ class AlbumListView
         /** @var \models\Album $album */
         foreach ($albums as $album) {
             $ret .=
-                '<div class="col s6 m3">
-                    <div class="card">
-                        <div class="card-image">
-                            <img src="'.$album->getCover().'" alt="Album cover for '.$album->getName().'"/>
+                "<div class='col s12 m3 l2'>
+                    <div class='card'>
+                        <div class='card-image'>
+                            <img src='".$album->getCover()."' alt='Album cover for ".$album->getName()."'/>
                         </div>
-                        <div class="card-content">
-                            <span class="card-title">'.$album->getArtist().'</span>
-                            <p>'.$album->getName().'</p>
-                            <span class="album-order-number">'.$album->getPosition().'</span>
+                        <div class='card-content'>
+                            <span class='card-title'>".$album->getArtist()."</span>
+                            <p>".$album->getName()."</p>
+                            <span class='album-order-number'>".$album->getPosition()."</span>
                         </div>
                     </div>
-                </div>';
+                </div>
+                <div>
+                    ".$this->renderAlbumPlaylist($album->getSpotifyURI())."
+                </div>";
         }
 
         return $ret;
+    }
+
+    private function renderAlbumPlaylist($spotifyURI)
+    {
+        if (!$spotifyURI) {
+            return "Spellista saknas.";
+        } else {
+            return '<iframe src="https://embed.spotify.com/?uri='.$spotifyURI.'"
+                    width="300" height="380" frameborder="0" allowtransparency="true"></iframe>';
+        }
     }
 
     public function setAlbumList($albumList)
