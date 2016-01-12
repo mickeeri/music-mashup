@@ -62,9 +62,30 @@ nav {
 
 #result-list .collection-item {
     cursor: pointer;
-
-
 }
+
+/* AlbumListView */
+
+.top-list-position {
+    position: absolute;
+    padding: 10px 15px;
+    color: white;
+    font-weight: bold;
+    background-color: #E1192C;
+    font-size: 17px;
+}
+
+.album-row {
+    border-bottom: 1px solid black;
+}
+
+.top-list-headline {
+    border-bottom: 1px solid #e2e2e2;
+}
+
+/* end */
+
+
 
 /* Success/Error Messages */
 #save-message, #create-list-message, #search-form-message {

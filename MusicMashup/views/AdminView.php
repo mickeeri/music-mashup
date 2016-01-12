@@ -87,7 +87,7 @@ class AdminView
     private function generateAlbumsOfTheYearList()
     {
         return
-        '<div class="row">
+        '<div class="row album-row">
             <div id="album-list-div" class="col s12 m12">
                 <h4>New top '.$this->numerOfAlbumsInList.'</h4>
                 <div id="save-message" style="display: none;"></div>
