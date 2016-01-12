@@ -4,8 +4,7 @@ require_once ("Settings.php");
 require_once ("controllers/MasterController.php");
 require_once ("views/NavigationView.php");
 require_once ("views/LayoutView.php");
-
-//require_once("AjaxHandler.php");
+require_once ("models/Exceptions.php");
 
 
 if ($_SERVER["HTTP_HOST"] === "localhost:8888") {

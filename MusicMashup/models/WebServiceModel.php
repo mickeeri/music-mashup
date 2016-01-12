@@ -36,9 +36,9 @@ class WebServiceModel
 
     /**
      * Using spotify api to generate
-     * @param $artist
-     * @param $albumName
-     * @return mixed
+     * @param string $artist
+     * @param string $albumName
+     * @return string uri;
      * @throws \Exception
      */
     public function getAlbumSpotifyURI($artist, $albumName)
@@ -51,7 +51,7 @@ class WebServiceModel
         $ch = curl_init();
 
         if (!$ch){
-            throw new \Exception("Failed to initialize.");
+            throw new \CurlInitException();
         }
 
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
@@ -64,13 +64,13 @@ class WebServiceModel
 
         if (empty($result)) {
             curl_close($ch);
-            throw new \Exception(curl_error($ch));
+            throw new \WebServiceEmptyResultException(curl_error($ch));
         } else {
             $info = curl_getinfo($ch);
             curl_close($ch);
 
             if ($info["http_code"] !== 200) {
-                throw new \Exception("Fel vid hämtning av album från Spotify.");
+                throw new \BadResponseCodeException();
             }
         }
 
@@ -80,68 +80,68 @@ class WebServiceModel
 //            throw new \Exception("Kunde inte hitta album på Spotify.");
 //        }
 
-        return $uri;
+        return filter_var($uri, FILTER_SANITIZE_STRING);
     }
 
-    public function createSpotifyPlayList(){
+//    public function createSpotifyPlayList(){
+//
+//        $userID = "me222wm";
+//
+//        $url = "https://api.spotify.com/v1/users/".$userID."/playlists";
+//
+//        $ch = curl_init();
+//        curl_setopt($ch, CURLOPT_URL, $url);
+//        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+//        curl_setopt($ch, CURLOPT_POST, 1);
+//
+//        $postString = "group1=$dayAndTime&username=zeke&password=coys&submit=login";
+//
+//        curl_setopt($ch, CURLOPT_POSTFIELDS, $postString);
+//        $responseString = curl_exec($ch);
+//        $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+//        curl_close($ch);
+//
+//        return $responseString;
+//
+//    }
 
-        $userID = "me222wm";
-
-        $url = "https://api.spotify.com/v1/users/".$userID."/playlists";
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_POST, 1);
-
-        $postString = "group1=$dayAndTime&username=zeke&password=coys&submit=login";
-
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $postString);
-        $responseString = curl_exec($ch);
-        $responseCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-        curl_close($ch);
-
-        return $responseString;
-
-    }
-
-    public function requestAuthorizationCode()
-    {
-        $clientID = "eabdd691d0c44d609a8ce121d358ef02";
-        $redirectURI = "http://localhost:8888/1dv449_projekt/MusicMashup/callback/";
-
-        //$requestURI = "https://accounts.spotify.com/authorize/?client_id=".$clientID."&response_type=code&redirect_uri=".$redirectURI;
-        $requestURI = "https://accounts.spotify.com/api/token";
-        //print($requestURI);
-
-        $ch = curl_init($requestURI);
-
-        if (false === $ch) {
-            throw new \Exception("Failed to initialize.");
-        }
-
-        $bodyParameter = array("grant_type" => "client_credentials");
-        $bodyParameter = json_encode($bodyParameter);
-
-        $ch = curl_init($requestURI);
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $bodyParameter);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-                'Content-Type: application/json',
-                'Content-Length: ' . strlen($data_string))
-        );
-
-
-
-        if (false === $output) {
-            throw new \Exception(curl_error($ch), curl_errno($ch));
-        }
-
-        ddd($output);
-
-        //var_dump($httpcode);
-
-        //echo $output;
-    }
+//    public function requestAuthorizationCode()
+//    {
+//        $clientID = "eabdd691d0c44d609a8ce121d358ef02";
+//        $redirectURI = "http://localhost:8888/1dv449_projekt/MusicMashup/callback/";
+//
+//        //$requestURI = "https://accounts.spotify.com/authorize/?client_id=".$clientID."&response_type=code&redirect_uri=".$redirectURI;
+//        $requestURI = "https://accounts.spotify.com/api/token";
+//        //print($requestURI);
+//
+//        $ch = curl_init($requestURI);
+//
+//        if (false === $ch) {
+//            throw new \Exception("Failed to initialize.");
+//        }
+//
+//        $bodyParameter = array("grant_type" => "client_credentials");
+//        $bodyParameter = json_encode($bodyParameter);
+//
+//        $ch = curl_init($requestURI);
+//        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "POST");
+//        curl_setopt($ch, CURLOPT_POSTFIELDS, $bodyParameter);
+//        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+//        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
+//                'Content-Type: application/json',
+//                'Content-Length: ' . strlen($data_string))
+//        );
+//
+//
+//
+//        if (false === $output) {
+//            throw new \Exception(curl_error($ch), curl_errno($ch));
+//        }
+//
+//        ddd($output);
+//
+//        //var_dump($httpcode);
+//
+//        //echo $output;
+//    }
 }

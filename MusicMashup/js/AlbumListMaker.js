@@ -4,9 +4,47 @@ function init(){
     AlbumListMaker = new AlbumListMaker();
 }
 
-var AlbumList = function () {
+// Album List object. Retuns array of error messages on failed validation.
+var AlbumList = function (source, link, year) {
 
+    $(".some-div").text(source);
+    var errorMessages = [];
+
+    if (typeof source === "undefined" || source === null || source === "") {
+        errorMessages.push("Du måste ange källa.");
+    } else if (source.length > 100) {
+        errorMessages.push("Namnet på källan är för långt.");
+    }
+
+    if (typeof link === "undefined" || link === null || link === "") {
+        errorMessages.push("Du måste ange en länk till källan.");
+    } else if (link.length > 150) {
+        errorMessages.push("Länken är för lång.");
+    }
+
+    if (typeof year === "undefined" || year === null || year === "") {
+        errorMessages.push("Du måste välja ett år.");
+    } else if (isNaN(year)) {
+        errorMessages.push("År måste vara ett nummer.");
+    }
+
+    // If error messages is empty assign values.
+    if (errorMessages.length === 0) {
+        this.source = getEscapedString(source);
+        this.link = getEscapedString(link);
+        this.year = getEscapedString(year);
+    } else {
+        return errorMessages;
+    }
+
+    // Basic escape to lower risk of xxs.
+    function getEscapedString(string){
+        $("#create-list-messages").text(string);
+        return $("#create-list-messages").text(string).html();
+    }
 };
+
+
 
 var AlbumListMaker = function(){
 
@@ -26,8 +64,6 @@ var AlbumListMaker = function(){
 
     // How many albums that is to be in the top list.
     this.numberOfAlbums = 2;
-
-    this.messages = [];
 
     // Disable search field until source and year is set.
     $("#album-search-field").attr("disabled", true);
@@ -56,24 +92,13 @@ AlbumListMaker.prototype.createList = function(){
     var yearInput = $("#year");
     var linkInput = $("#link");
 
-    // TODO: Escape inpout.
+    // Creating new list.
+    var newList = new AlbumList(sourceInput.val(), linkInput.val(), yearInput.val());
 
-    // Validation
-    if (sourceInput.val() === "") {
-        errorMessages.push("Du måste ange källa.");
-    }
+    console.log(newList);
 
-    if (linkInput.val() === "") {
-        errorMessages.push("Du måste ange en länk till källan.");
-    }
-
-    if (linkInput.val().length === 150) {
-        errorMessages.push("Källa innehåller för många bokstäver.");
-    }
-
-    if (yearInput.val() === null) {
-        errorMessages.push("Du måste välja ett år.");
-    }
+    $("#create-list-form").prepend(newList.source);
+    $("#create-list-form").prepend(newList.link);
 
     // If there are no error messages.
     if (errorMessages.length === 0) {
@@ -82,9 +107,9 @@ AlbumListMaker.prototype.createList = function(){
         $("#create-list-messages").fadeOut("fast");
 
         // Assigning values to variables declared in main function.
-        this.source = sourceInput.val();
-        this.year = yearInput.val();
-        this.link = linkInput.val();
+        //this.source = sourceInput.val();
+        //this.year = yearInput.val();
+        //this.link = linkInput.val();
 
         // Disable inputs after submit;
         sourceInput.attr("disabled", true);
@@ -142,7 +167,7 @@ AlbumListMaker.prototype.displaySearchResults = function(albumMatches) {
     resultsDiv.empty();
 
     resultsDiv.append(
-        "<div class='col s12 m6 offset-m3'>" +
+        "<div class='col s12 m8 offset-m2'>" +
             "<h4>Search results</h4>" +
             "<p>Click to select album for place "+this.numberOfAlbums+".</p>" +
             "<ul id='result-list' class='collection'></ul>" +
@@ -151,6 +176,10 @@ AlbumListMaker.prototype.displaySearchResults = function(albumMatches) {
 
     // Render search result.
     albumMatches.forEach(function(album){
+
+        $(".some-div").text(album.name);
+
+
         var imageSrc = album.image[2]["#text"];
         // Presentation of search result.
         $("#result-list").append(
@@ -225,6 +254,8 @@ AlbumListMaker.prototype.addAlbumToList = function (selectedAlbum) {
 
         // Array of selected albums as list items.
         var selectedAlbums = $("#top-albums").children().toArray();
+
+        // Insert Save button.
         $("#album-list-div").append("<button id='save-list-button' class='waves-effect waves-light btn right'>Spara lista</button>");
 
         // When user is done with list and presses save.
@@ -279,10 +310,6 @@ AlbumListMaker.prototype.saveList = function () {
         $(messageDiv).addClass("success");
         $(messageDiv).text("List saved without problem!");
         $("#save-list-button").attr("disabled", true);
-
-        console.log(response);
-
-        // TODO: clear list.
 
     }).fail(function(response){
 

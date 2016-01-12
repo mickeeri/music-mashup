@@ -66,7 +66,7 @@ class AdminView
         return
         '<div class="row">
             <div class="col s12 m8 offset-m2">
-                <h4>2. Hitta album</h4>
+                <h4 id="find-album-header">2. Hitta album</h4>
                 <div id="search-form-message" style="display:none;"></div>
                 <form id="album-form" method="post">
                     <div class="row">
