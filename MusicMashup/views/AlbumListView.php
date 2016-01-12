@@ -30,20 +30,21 @@ class AlbumListView
 
 
             $ret .=
-'<div class="row album-row">
-    <div class="row">
-        <h4>'.$album->getPosition().'. '.$album->getArtist().' - '.$album->getArtist().'</h4>
-        <span class="top-list-position">'.$album->getPosition().'</span>
-        <img class="responsive-img" src="'.$album->getCover().'" alt="Omslagsbild för '.$album->getName().'">
-    </div>
-    <div class="col s12 m4">
-        <h5>'.$album->getName().'</h5>
-        <p>'.$album->getArtist().'</p>
-    </div>
-    <div class="col s12 m4">'.$this->renderAlbumPlaylist($album->getSpotifyURI()).'</div>
-</div>';
-        }
+                '<div class="row album-row">
+                    <div class="row">
+                        <h5>'.$album->getPosition().'. '.$album->getArtist().' - '.$album->getName().'</h5>
 
+                    </div>
+                    <div class="row">
+                        <div class="col s12 m6">
+                            <img class="responsive-img" src="'.$album->getCover().'" alt="Omslagsbild för '.$album->getName().'">
+                        </div>
+                        <div class="col s12 m6 align-right">
+                            '.$this->renderAlbumPlaylist($album->getSpotifyURI()).'
+                        </div>
+                    </div>
+                </div>';
+        }
         return $ret;
     }
 
@@ -66,8 +67,14 @@ class AlbumListView
         if (!$spotifyURI) {
             return "Spellista saknas.";
         } else {
-            return '<iframe src="https://embed.spotify.com/?uri='.$spotifyURI.'"
-                    width="400" height="360" frameborder="0" allowtransparency="true"></iframe>';
+//            return '<iframe src="https://embed.spotify.com/?uri='.$spotifyURI.'"
+//                    width="400" height="360" frameborder="0" allowtransparency="true"></iframe>';
+
+//            return '<iframe src="https://embed.spotify.com/?uri='.$spotifyURI.'&theme=white&view=coverart"
+//                    width="300" height="80" frameborder="0" allowtransparency="true"></iframe>';
+
+            return '<a href="'.$spotifyURI.'"><img class="spotify-loggo" src="images\listen_on_spotify-black.svg"
+                    alt="Klicka för att lyssna på spotify."/></a>';
         }
     }
 

@@ -7,6 +7,11 @@ require_once("models/Album.php");
 require_once("models/AlbumListDAL.php");
 require_once ("Settings.php");
 
+//if (true) {
+//    error_reporting(-1);
+//    ini_set('display_errors', 'ON');
+//}
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $year = $_POST["year"];
@@ -23,28 +28,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit;
     }
 
+
     // Converting associative array to php object.
     $albumsAsPHPObjects = array();
 
-    foreach ($albums as $album) {
-        array_push($albumsAsPHPObjects, new \models\Album($album["name"], $album["artist"], $album["position"], ""));
+    try {
+        // Creating php object for each album.
+        foreach ($albums as $album) {
+            array_push($albumsAsPHPObjects, new \models\Album($album["name"], $album["artist"], $album["position"], "", null));
+        }
+    } catch (\Exception $e) {
+        http_response_code(500);
+        echo $e->getMessage();
     }
-
-    $yearList = new \models\AlbumsOfTheYearList($year, $source, $link, $albumsAsPHPObjects);
-
-    //var_dump($yearList);
-
 
     try {
-        $facade = new \models\Facade();
-        $facade->saveList($yearList);
+        // Creating list and inserting albums.
+        $yearList = new \models\AlbumsOfTheYearList($year, $source, $link, $albumsAsPHPObjects);
     } catch (\Exception $e) {
-        echo $e;
+        http_response_code(500);
+        echo $e->getMessage();
     }
 
-
-    //echo "Your list has been saved";
-
+    // Saving list in database.
+    $facade = new \models\Facade();
+    $facade->saveList($yearList);
 }
 
 

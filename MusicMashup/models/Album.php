@@ -24,7 +24,9 @@ class Album
      */
     public function __construct($name, $artist, $position, $cover, $spotifyURI)
     {
-        // TODO: Validera string-lenght och att att position är en siffra mellan 1 och ...
+        if ($name === "") {
+            throw new \Exception("Får inte vara tomt");
+        }
 
         $this->name = filter_var($name, FILTER_SANITIZE_STRING);
         $this->artist = filter_var($artist, FILTER_SANITIZE_STRING);

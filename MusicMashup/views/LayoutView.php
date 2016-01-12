@@ -28,7 +28,7 @@ class LayoutView
 	      	<body>
 				<div class="container">
 				    <div class="row">
-				        <div class="col s12 m10">
+				        <div class="col s12 m9 offset-m1">
                             <header>
                                 ' . $nv->getNavigationBar() . '
                             </header>

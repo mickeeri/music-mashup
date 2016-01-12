@@ -76,11 +76,20 @@ nav {
 }
 
 .album-row {
-    border-bottom: 1px solid black;
+    border-bottom: 1px solid #e2e2e2;
+    padding-left: 30px;
 }
 
 .top-list-headline {
     border-bottom: 1px solid #e2e2e2;
+}
+
+.spotify-loggo {
+    width: 200px;
+}
+
+.align-right {
+    text-align: right;
 }
 
 /* end */
@@ -88,23 +97,28 @@ nav {
 
 
 /* Success/Error Messages */
-#save-message, #create-list-message, #search-form-message {
+#save-message, #create-list-messages, #search-form-message {
     padding: 20px;
     border: 1px solid #B0BEC5;
     margin-bottom: 20px;
-    -webkit-border-radius: 10px;
-    -moz-border-radius: 10px;
-    border-radius: 10px;
+    /*-webkit-border-radius: 10px;*/
+    /*-moz-border-radius: 10px;*/
+    /*border-radius: 10px;*/
     box-shadow: 0 2px 5px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12);
     font-weight:bold;
 }
 
 .success {
-    background-color: #CCFF90;
+    background-color: #D2F7DF;
 }
 
 .error {
-    background-color: #FFCDD2;
+    background-color: #FFEBEE;
+}
+
+.close-message-icon {
+    cursor: pointer;
+    float: right;
 }
 
 /**/

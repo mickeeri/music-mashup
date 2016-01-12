@@ -27,8 +27,9 @@ class AlbumListDAL
             $stmt->bindParam(":link", $list->getLink());
             $stmt->execute();
             $this->addAlbumsToList($this->db->lastInsertId(), $list->getAlbums());
-        } catch (\Exception $e) {
-            echo "Databasfel: ".$e->getMessage();
+        } catch (\PDOException $e) {
+            // Throws possible exception to be handled in Facade.
+            throw new \PDOException($e->getMessage());
         }
     }
 
@@ -52,96 +53,107 @@ class AlbumListDAL
                 $stmt->bindParam(":spotifyURI", $album->getSpotifyURI());
                 $stmt->bindParam(":listID", intval($listID));
                 $stmt->execute();
-            } catch (\Exception $e) {
-                echo "Databasfel: ".$e->getMessage();
+            } catch (\PDOException $e) {
+                throw new \PDOException($e->getMessage());
             }
         }
     }
 
     public function getYears(){
-        $stmt = $this->db->query('SELECT year FROM albumlist ORDER BY year DESC LIMIT 15');
-        $stmt->setFetchMode(\PDO::FETCH_ASSOC);
+        try {
+            $stmt = $this->db->query('SELECT year FROM albumlist ORDER BY year DESC LIMIT 15');
+            $stmt->setFetchMode(\PDO::FETCH_ASSOC);
 
-        $years = array();
+            $years = array();
 
-        while($row = $stmt->fetch()) {
-            if (!in_array($row['year'], $years)) {
-                array_push($years, $row['year']);
+            while($row = $stmt->fetch()) {
+                if (!in_array($row['year'], $years)) {
+                    array_push($years, $row['year']);
+                }
             }
-        }
 
-        return $years;
+            return $years;
+
+        } catch (\PDOException $e) {
+            throw new \PDOException($e->getMessage());
+        }
     }
 
     public function getListsForYear($year)
     {
-        $stmt = $this->db->query('SELECT listID, year, source, link FROM albumlist WHERE year = '.$year);
-        //$stmt->bindParam(':year', $year);
-        $stmt->setFetchMode(\PDO::FETCH_ASSOC);
+        try {
 
-        $lists = array();
+            $stmt = $this->db->query('SELECT listID, year, source, link FROM albumlist WHERE year = '.$year);
+            //$stmt->bindParam(':year', $year);
+            $stmt->setFetchMode(\PDO::FETCH_ASSOC);
 
-        while($row = $stmt->fetch())
-        {
-            $listID = $row['listID'];
-            $y = $row['year'];
-            $source = $row['source'];
-            $link = $row['link'];
-            //$albums = $this->getAlbumsByListID($listID);
+            $lists = array();
 
-            $list = new \models\AlbumsOfTheYearList($y, $source, $link, "");
-            $list->setListID($listID);
+            while($row = $stmt->fetch())
+            {
+                $listID = $row['listID'];
+                $y = $row['year'];
+                $source = $row['source'];
+                $link = $row['link'];
 
-            array_push($lists, $list);
+                $list = new \models\AlbumsOfTheYearList($y, $source, $link, "");
+                $list->setListID($listID);
 
+                array_push($lists, $list);
+            }
+
+            return $lists;
+
+        } catch (\PDOException $e) {
+            throw new \PDOException($e->getMessage());
         }
 
-        return $lists;
     }
 
     public function getListByID($listID)
     {
-        $stmt = $this->db->query('SELECT listID, year, source, link FROM albumlist WHERE listID = '.$listID);
-        $stmt->setFetchMode(\PDO::FETCH_OBJ);
-        $row = $stmt->fetch();
-        $albums = $this->getAlbumsByListID($row->listID);
-        $list = new \models\AlbumsOfTheYearList($row->year, $row->source, $row->link, $albums);
-        $list->setListID($listID);
-        return $list;
+        try {
+
+            $stmt = $this->db->query('SELECT listID, year, source, link FROM albumlist WHERE listID = '.$listID);
+            $stmt->setFetchMode(\PDO::FETCH_OBJ);
+            $row = $stmt->fetch();
+            $albums = $this->getAlbumsByListID($row->listID);
+            $list = new \models\AlbumsOfTheYearList($row->year, $row->source, $row->link, $albums);
+            $list->setListID($listID);
+            return $list;
+
+        } catch (\PDOException $e) {
+            throw new \PDOException($e->getMessage());
+        }
+
     }
 
     private function getAlbumsByListID($listID)
     {
-        $stmt = $this->db->query('SELECT albumID, name, artist, position, spotifyURI, cover FROM album WHERE listID = '.$listID.' ORDER BY position ASC');
-        $stmt->setFetchMode(\PDO::FETCH_ASSOC);
+        try {
+            $stmt = $this->db->query('SELECT albumID, name, artist, position, spotifyURI, cover FROM album WHERE listID = '.$listID.' ORDER BY position ASC');
+            $stmt->setFetchMode(\PDO::FETCH_ASSOC);
 
-        $albums = array();
+            $albums = array();
 
-        while ($row = $stmt->fetch()) {
-            $albumID = $row['albumID'];
-            $name = $row['name'];
-            $artist = $row['artist'];
-            $position = $row['position'];
-            $cover = $row['cover'];
-            $spotifyURI = $row['spotifyURI'];
+            while ($row = $stmt->fetch()) {
+                $albumID = $row['albumID'];
+                $name = $row['name'];
+                $artist = $row['artist'];
+                $position = $row['position'];
+                $cover = $row['cover'];
+                $spotifyURI = $row['spotifyURI'];
 
-            $album = new \models\Album($name, $artist, $position, $cover, $spotifyURI);
-            $album->setAlbumID($albumID);
+                $album = new \models\Album($name, $artist, $position, $cover, $spotifyURI);
+                $album->setAlbumID($albumID);
 
-            array_push($albums, $album);
+                array_push($albums, $album);
+            }
+
+            return $albums;
+
+        } catch (\PDOException $e) {
+            throw new \PDOException($e->getMessage());
         }
-
-        return $albums;
     }
-//
-//    private function insertAlbumCover($albumID, $cover)
-//    {
-//        $stmt = $this->db->prepare("UPDATE album SET cover = :cover WHERE albumID = :albumID");
-//        $stmt->bindParam(":cover", $cover);
-//        $stmt->bindParam(":albumID", $albumID);
-//        $stmt->execute();
-//    }
-
-
-
 }

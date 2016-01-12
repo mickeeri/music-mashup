@@ -14,10 +14,10 @@ if ($_SERVER["HTTP_HOST"] === "localhost:8888") {
     ini_set('display_errors', 'ON');
 }
 
-if (Settings::DISPLAY_ERRORS) {
-    error_reporting(-1);
-    ini_set('display_errors', 'ON');
-}
+//if (Settings::DISPLAY_ERRORS) {
+//    error_reporting(-1);
+//    ini_set('display_errors', 'ON');
+//}
 
 
 

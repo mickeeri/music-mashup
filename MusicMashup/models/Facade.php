@@ -23,20 +23,19 @@ class Facade
     }
 
     /**
+     * Save Album List. Called from AjaxHandler.php.
      * @param AlbumsOfTheYearList $list
      */
     public function saveList(AlbumsOfTheYearList $list)
     {
        try {
-
            $this->dal->addList($list);
-           //$this->dal->addAlbumsToList($listID, )
-           echo "Your list has been saved.";
-
-
+           http_response_code(200);
+           echo "Din lista har sparats.";
        } catch (\Exception $e) {
            http_response_code(500);
            echo $e->getMessage();
+           exit;
        }
     }
 
@@ -45,7 +44,11 @@ class Facade
      */
     public function getYears()
     {
-        return $this->dal->getYears();
+        try {
+            return $this->dal->getYears();
+        } catch (\Exception $e) {
+
+        }
     }
 
     public function getListsForYear($year)
