@@ -4,6 +4,7 @@ main {
     background-color: #FFFFFF;
     /*border:solid 1px #d8d8d8;*/
     padding: 50px;
+    margin-top: 10px;
 }
 
 body {
@@ -33,6 +34,19 @@ nav {
 
 .nav-wrapper a:hover {
     color: #ffeb73 !important;
+}
+
+.jumbotron {
+    padding: 40px;
+    background-color: #EEEEEE;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    margin-bottom: 60px !important;
+}
+
+.card-title {
+    font-weight: 400 !important;
 }
 
 /**/
@@ -94,10 +108,15 @@ nav {
 
 /* end */
 
-
+.spinner {
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    width: 30px;
+}
 
 /* Success/Error Messages */
-#save-message, #create-list-messages, #search-form-message {
+#save-message, #create-list-messages, #search-form-message, .offline-message, .error-div {
     padding: 20px;
     border: 1px solid #B0BEC5;
     margin-bottom: 20px;
@@ -131,4 +150,7 @@ nav {
     background-color: #F0F4C3 !important;
 }
 
-/*#D2F7DF*/
+/* Search form */
+#last-fm-logo {
+    width: 60px
+}

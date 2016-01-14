@@ -61,7 +61,7 @@ class AlbumListDAL
 
     public function getYears(){
         try {
-            $stmt = $this->db->query('SELECT year FROM albumlist ORDER BY year DESC LIMIT 15');
+            $stmt = $this->db->query('SELECT year FROM albumlist ORDER BY year DESC');
             $stmt->setFetchMode(\PDO::FETCH_ASSOC);
 
             $years = array();
@@ -131,7 +131,8 @@ class AlbumListDAL
     private function getAlbumsByListID($listID)
     {
         try {
-            $stmt = $this->db->query('SELECT albumID, name, artist, position, spotifyURI, cover FROM album WHERE listID = '.$listID.' ORDER BY position ASC');
+            $stmt = $this->db->query('SELECT albumID, name, artist, position, spotifyURI, cover FROM album
+                                      WHERE listID = '.$listID.' ORDER BY position ASC');
             $stmt->setFetchMode(\PDO::FETCH_ASSOC);
 
             $albums = array();
@@ -155,5 +156,33 @@ class AlbumListDAL
         } catch (\PDOException $e) {
             throw new \PDOException($e->getMessage());
         }
+    }
+
+    public function deleteListByID($listID)
+    {
+//        try {
+            $stmt = $this->db->prepare('DELETE FROM albumlist WHERE listID = :listID');
+            $stmt->bindParam(':listID', $listID);
+            $stmt->execute();
+
+            // Delete all albums with that id.
+            $this->deleteAlbumsByListID($listID);
+
+//        } catch (\PDOException $e) {
+//            throw new \PDOException($e->getMessage());
+//        }
+    }
+
+    private function deleteAlbumsByListID($listID)
+    {
+//        try {
+            $stmt = $this->db->prepare('DELETE FROM album WHERE listID = :listID');
+            $stmt->bindParam(':listID', $listID);
+            $stmt->execute();
+
+
+//        } catch (\PDOException $e) {
+//            throw new \PDOException($e->getMessage());
+//        }
     }
 }

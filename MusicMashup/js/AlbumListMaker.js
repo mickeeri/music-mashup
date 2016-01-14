@@ -4,8 +4,64 @@ function init(){
     AlbumListMaker = new AlbumListMaker();
 }
 
+var Album = function(name, artist, position, cover){
+
+    this.name;
+    this.artist;
+    this.position;
+    this.cover;
+
+    var errorMessages = [];
+
+    if (typeof name === "undefined" || name === null || name === "") {
+        errorMessages.push("Albumnamn saknas");
+    } else if (name.length > 100) {
+        errorMessages.push("Albumnamn är för långt.");
+    }
+
+    if (typeof artist === "undefined" || artist === null || artist === "") {
+        errorMessages.push("Artist saknas.");
+    } else if (artist.length > 50) {
+        errorMessages.push("Albumets artist består av för många tecken.");
+    }
+
+    if (typeof position === "undefined" || position === null || position === "") {
+        errorMessages.push("Plats saknas.");
+    } else if (isNaN(position)) {
+        errorMessages.push("Albumets plats måste vara ett nummer.");
+    }
+
+    if (typeof cover === "undefined" || cover === null || cover === "") {
+        // If cover is missing assign default cover.
+        this.cover = "images/default-img.png";
+    } else {
+        this.cover = cover;
+    }
+
+    if (errorMessages.length === 0) {
+        this.name = getEscapedString(name);
+        this.artist = getEscapedString(artist);
+        this.position = getEscapedString(position);
+    } else {
+        return errorMessages;
+    }
+
+    // Basic escape to lower risk of xss.
+    function getEscapedString(string){
+        $("#create-list-messages").text(string);
+        return $("#create-list-messages").text(string).html();
+    }
+};
+
 // Album List object. Retuns array of error messages on failed validation.
 var AlbumList = function (source, link, year) {
+
+
+    this.source;
+    this.link;
+    this.year;
+    // Array of album objects.
+    this.albums = [];
 
     $(".some-div").text(source);
     var errorMessages = [];
@@ -37,7 +93,7 @@ var AlbumList = function (source, link, year) {
         return errorMessages;
     }
 
-    // Basic escape to lower risk of xxs.
+    // Basic escape to lower risk of xss.
     function getEscapedString(string){
         $("#create-list-messages").text(string);
         return $("#create-list-messages").text(string).html();
@@ -49,21 +105,26 @@ var AlbumList = function (source, link, year) {
 var AlbumListMaker = function(){
 
     var that = this;
-    // TODO: Gör så att markören hamnar i input-fältet. t.ex. när man lagt in år och sånt.
 
     var createListForm = $("#create-list-form");
     var albumSearchForm = $("#album-form");
 
-    this.source = "";
-    this.year = "";
-    this.link = "";
+
+    $('#source').focus();
+    //$('#source').select();
+
+    //this.source = "";
+    //this.year = "";
+    //this.link = "";
+    this.list;
     this.topAlbums = [];
 
     this.messageTypeSuccess = "success";
     this.messageTypeError = "error";
 
     // How many albums that is to be in the top list.
-    this.numberOfAlbums = 2;
+    this.numberOfAlbumsInList = 2;
+    this.albumNumber = this.numberOfAlbumsInList;
 
     // Disable search field until source and year is set.
     $("#album-search-field").attr("disabled", true);
@@ -93,23 +154,16 @@ AlbumListMaker.prototype.createList = function(){
     var linkInput = $("#link");
 
     // Creating new list.
-    var newList = new AlbumList(sourceInput.val(), linkInput.val(), yearInput.val());
-
-    console.log(newList);
-
-    $("#create-list-form").prepend(newList.source);
-    $("#create-list-form").prepend(newList.link);
+    var list =  new AlbumList(sourceInput.val(), linkInput.val(), yearInput.val());
 
     // If there are no error messages.
-    if (errorMessages.length === 0) {
+    if (Array.isArray(list) === false) {
+
+        // If no errors assign created list to this.list.
+        this.list = list;
 
         // Clears possible error message container.
         $("#create-list-messages").fadeOut("fast");
-
-        // Assigning values to variables declared in main function.
-        //this.source = sourceInput.val();
-        //this.year = yearInput.val();
-        //this.link = linkInput.val();
 
         // Disable inputs after submit;
         sourceInput.attr("disabled", true);
@@ -122,11 +176,11 @@ AlbumListMaker.prototype.createList = function(){
         $("#album-search-button").attr("disabled", false);
 
         // Make last element in top list active.
-        $("#album-li-"+this.numberOfAlbums).addClass("active-li");
+        $("#album-li-"+this.albumNumber).addClass("active-li");
     }
     // One or more errors on submit.
     else {
-        this.displayMessage("#create-list-messages", this.messageTypeError, errorMessages);
+        this.displayMessage("#create-list-messages", this.messageTypeError, list);
     }
 };
 
@@ -169,7 +223,7 @@ AlbumListMaker.prototype.displaySearchResults = function(albumMatches) {
     resultsDiv.append(
         "<div class='col s12 m8 offset-m2'>" +
             "<h4>Search results</h4>" +
-            "<p>Click to select album for place "+this.numberOfAlbums+".</p>" +
+            "<p>Click to select album for place "+this.albumNumber+".</p>" +
             "<ul id='result-list' class='collection'></ul>" +
         "</div>"
     );
@@ -212,20 +266,20 @@ AlbumListMaker.prototype.selectAlbum = function(clickedAlbumListItem) {
     //this.displayMessage($("#save-message"), this.messageTypeSuccess, "Album tillagt!");
 
     // Remove active class from current list item.
-    $("#album-li-"+this.numberOfAlbums).removeClass("active-li");
+    $("#album-li-"+this.albumNumber).removeClass("active-li");
 
     // Decrese number of albums left to add.
-    this.numberOfAlbums--;
+    this.albumNumber--;
 
     // Make next list item active.
-    $("#album-li-"+this.numberOfAlbums).addClass("active-li");
+    $("#album-li-"+this.albumNumber).addClass("active-li");
 };
 
 AlbumListMaker.prototype.addAlbumToList = function (selectedAlbum) {
 
     var that = this;
 
-    var albumNumber = this.numberOfAlbums;
+    var albumNumber = this.albumNumber;
 
     // Album values.
     var albumName = $(selectedAlbum).children(".title").clone();
@@ -237,8 +291,6 @@ AlbumListMaker.prototype.addAlbumToList = function (selectedAlbum) {
     listItem.append(cover);
     listItem.append(albumName);
     listItem.append(artist);
-
-    console.log(albumNumber);
 
     // If the album is the last album.
     if (albumNumber === 1) {
@@ -268,75 +320,100 @@ AlbumListMaker.prototype.addAlbumToList = function (selectedAlbum) {
 AlbumListMaker.prototype.getAlbumsFromTopList = function (selectedAlbums) {
 
     // The albums in the list are extracted and saved as objects in array.
-    this.topAlbums = [];
     var that = this;
+    var topAlbums = [];
+
+    var errors = [];
 
     // Iterates to list of top albums builds object and adds to array.
     $(selectedAlbums).each(function () {
 
+
         var name = $(this).find(".title").text();
         var artist = $(this).find(".artist").text();
         var position = $(this).find(".album-order-number").text();
+        var cover = $(this).find("img").attr('src');
 
-        var album = {
-            name: name,
-            artist: artist,
-            position: position
-        };
+        var album = new Album(name, artist, position, cover);
 
-        that.topAlbums.push(album);
+        //var album = {
+        //    name: name,
+        //    artist: artist,
+        //    position: position
+        //};
+        //console.log(album);
 
+        // If something wrong Album class returns array with errors instead of object.
+        if (Array.isArray(album) === false) {
+            topAlbums.push(album);
+        } else {
+            // Add error messages from Album class to array errors.
+            errors = album;
+        }
     });
 
-    this.saveList();
+    if (topAlbums.length === this.numberOfAlbumsInList && errors.length === 0) {
+        this.saveList(topAlbums);
+    } else {
+        errors.unshift("Albumen går inte att spara. Fel med albuminformationen: ");
+        that.displayMessage($("#save-message"), that.messageTypeError, errors);
+    }
 };
 
 // Saves list with jQuery post.
-AlbumListMaker.prototype.saveList = function () {
+AlbumListMaker.prototype.saveList = function (albums) {
+
+    var that = this;
 
     // Displays error or success messages.
     var messageDiv = $("#save-message");
 
-    var albumOfTheYearList = {
-        year: this.year,
-        source: this.source,
-        link: this.link,
-        albums: this.topAlbums
-    };
+    // Adding albums to already created list.
+    this.list.albums = albums;
 
-    $.post("AjaxHandler.php", albumOfTheYearList).done(function(response){
 
-        $(messageDiv).removeClass("error");
-        $(messageDiv).addClass("success");
-        $(messageDiv).text("List saved without problem!");
+    $.post("AjaxHandler.php", this.list).done(function(response){
+
+        that.displayMessage(messageDiv, that.messageTypeSuccess, "Listan sparad utan problem!");
         $("#save-list-button").attr("disabled", true);
+        // TODO: länk för att ladda om sidan.
+        //$(messageDiv).removeClass("error");
+        //$(messageDiv).addClass("success");
+        //$(messageDiv).text("List saved without problem!");
+        //$("#save-list-button").attr("disabled", true);
 
     }).fail(function(response){
 
-        $(messageDiv).removeClass("success");
-        $(messageDiv).addClass("error");
-
+        //$(messageDiv).removeClass("success");
+        //$(messageDiv).addClass("error");
+        //
         console.log(response);
 
+        var errorMessage = "";
+
         if (response.responseText !== "") {
-            $(messageDiv).text("The following error occurred: " + response.responseText);
+            //$(messageDiv).text("The following error occurred: " + response.responseText);
+            errorMessage = response.responseText;
         } else {
-            $(messageDiv).text("An error occurred, please try again.");
+            errorMessage = ("Ett fel uppstod när listan skulle sparas.");
+            //$(messageDiv).text("An error occurred, please try again.");
         }
+
+        that.displayMessage(messageDiv, that.messageTypeError, errorMessage);
 
     }).always(function (response) {
 
-        console.log(response);
+        console.log("Always: " + response);
 
-        // Displays feedback message.
-        $(messageDiv).show("fast");
-        $(messageDiv).click(function () {
-            $(this).hide("fast");
-        });
-
-        if (response.responseText !== "") {
-            $(messageDiv).text(response.responseText);
-        }
+        //// Displays feedback message.
+        //$(messageDiv).show("fast");
+        //$(messageDiv).click(function () {
+        //    $(this).hide("fast");
+        //});
+        //
+        //if (response.responseText !== "") {
+        //    $(messageDiv).text(response.responseText);
+        //}
     });
 };
 

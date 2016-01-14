@@ -7,16 +7,30 @@ class AlbumListView
 {
     /** @var \models\AlbumsOfTheYearList $albumList */
     private $albumList;
+    private $errorMessage;
+
 
     public function response()
     {
-        return
-            '<div class="row">
-                <h4 class="top-list-headline">De bästa albumen '.$this->albumList->getYear().' enligt
-                <a href="'.$this->albumList->getLink().'">'.$this->albumList->getSource().'</a></h4>
-            </div>
-            '.$this->renderAlbums().'
-            ';
+
+        $ret =
+            '<div class="row"><a class="btn waves-effect waves-light indigo darken-2"
+                href="'.$_SERVER["PHP_SELF"].'">Tillbaka till listorna</a></div>';
+
+        d($this->errorMessage);
+
+        if (isset($this->errorMessage)) {
+            $ret .= '<div class="error error-div">'.$this->errorMessage.'</div>';
+        } else {
+            $ret .=
+                '<div class="row">
+                    <h4 class="top-list-headline">De bästa albumen '.$this->albumList->getYear().' enligt
+                    <a href="'.$this->albumList->getLink().'">'.$this->albumList->getSource().'</a></h4>
+                </div>
+                '.$this->renderAlbums().'';
+        }
+
+        return $ret;
     }
 
     private function renderAlbums()
@@ -82,4 +96,18 @@ class AlbumListView
     {
         $this->albumList = $albumList;
     }
+
+    public function getErrorMessage()
+    {
+        if ($this->errorMessage !== "") {
+            return '<div class="error error-div">'.$this->errorMessage.'</div>';
+        }
+    }
+
+    public function setErrorMessage($message)
+    {
+        $this->errorMessage = $message;
+    }
+
+
 }

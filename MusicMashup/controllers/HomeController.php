@@ -10,34 +10,31 @@ require_once ("models/Album.php");
 class HomeController
 {
     private $facade;
-    //private $view;
+    private $view;
     private $navigation;
 
-    public function __construct(\models\Facade $facade, \views\NavigationView $nv)
+    /**
+     * HomeController constructor.
+     * @param \views\HomeView $view
+     * @param \models\Facade $facade
+     * @param \views\NavigationView $nv
+     */
+    public function __construct(\views\HomeView $view, \models\Facade $facade, \views\NavigationView $nv)
     {
         $this->facade = $facade;
-        //$this->view = $view;
+        $this->view = $view;
         $this->navigation = $nv;
     }
 
-    public function handleInput()
+    public function provideTopLists()
     {
-        $content = "";
+        try {
+            $years = $this->facade->getYearsAndLists();
+            $this->view->setYears($years);
 
-        if ($this->navigation->onYearPage()) {
+        } catch (\FetchAlbumListsException $e) {
 
-            $content = $this->renderListsForYear();
         }
-
-        return $content;
-    }
-
-    private function renderListsForYear()
-    {
-        $year = $this->navigation->getYearToShow();
-        $lists = $this->facade->getListsForYear($year);
-        $listView = new \views\ListView($lists);
-        return $listView->render();
     }
 
 

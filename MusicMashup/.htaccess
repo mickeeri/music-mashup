@@ -1,0 +1,5 @@
+AddType text/cache-manifest .appcache
+
+#<FilesMatch ".(html|htm)$">
+#    Header set Cache-Control "max-age=14400, public, must-revalidate"
+#</FilesMatch>

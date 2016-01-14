@@ -2,25 +2,52 @@
 
 namespace controllers;
 
-//require_once ("models/AlbumListDAL.php");
-//require_once ("models/AjaxAjaxFacade.php");
-
-
 class AdminController
 {
-    function __construct()
+    private $facade;
+    private $view;
+    public $listToDelete;
+
+    function __construct(\views\AdminListsView $alv, \models\Facade $facade)
     {
-//        $this->dal = new \models\AlbumListDAL($db);
-//        $this->facade = new \models\Facade($this->dal);
+        $this->facade = $facade;
+        $this->view = $alv;
     }
 
     /**
      * @return \views\AdminView
      */
-    public function getAdminView()
+//    public function getAdminView()
+//    {
+//        return new \views\AdminView();
+//    }
+
+    public function getLists()
     {
-        return new \views\AdminView();
+        try {
+            if (isset($this->listToDelete)) {
+                $list = $this->facade->getListByID($this->listToDelete);
+                $this->view->setListToDelete($list);
+            }
+
+
+            if ($this->view->wantsToDelteList()) {
+                $listID = $this->view->getListToDelete();
+                $this->facade->deleteList($listID);
+                var_dump("List removed");
+            }
+
+
+
+            $years = $this->facade->getYearsAndLists();
+            $this->view->setYears($years);
+
+        } catch (\FetchAlbumListsException $e) {
+
+        }
     }
+
+
 
 
 }

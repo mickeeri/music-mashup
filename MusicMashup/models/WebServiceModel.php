@@ -43,22 +43,18 @@ class WebServiceModel
      */
     public function getAlbumSpotifyURI($artist, $albumName)
     {
-        $artist = preg_replace('/\s+/', '+', $artist);
-        $albumName = preg_replace('/\s+/', '+', $albumName);
-
-        $url = "https://api.spotify.com/v1/search?q=album:".$albumName."+artist:".$artist."&type=album";
-
         $ch = curl_init();
 
         if (!$ch){
             throw new \CurlInitException();
         }
 
+        $url = "https://api.spotify.com/v1/search?q=album:".curl_escape($ch, $albumName)."+artist:".curl_escape($ch, $artist)."&type=album";
+
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_URL, $url);
         $result = curl_exec($ch);
-
 
         $result = json_decode($result);
 
@@ -68,18 +64,12 @@ class WebServiceModel
         } else {
             $info = curl_getinfo($ch);
             curl_close($ch);
-
             if ($info["http_code"] !== 200) {
                 throw new \BadResponseCodeException();
             }
         }
 
         $uri = $result->albums->items[0]->uri;
-
-//        if (!$uri) {
-//            throw new \Exception("Kunde inte hitta album på Spotify.");
-//        }
-
         return filter_var($uri, FILTER_SANITIZE_STRING);
     }
 

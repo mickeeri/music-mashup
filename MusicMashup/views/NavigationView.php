@@ -7,7 +7,9 @@ class NavigationView
 {
     private static $sessionSaveLocation = "\\view\\NavigationView\\message";
     private static $yearURL = "year";
+    public static $adminListsURI = "albumlists";
     private static $listURL = "albumlist";
+    public static $removeListURI = "removelist";
     private $years;
 
     public function getNavigationBar()
@@ -33,6 +35,31 @@ class NavigationView
         } else {
             return false;
         }
+    }
+
+    public function onAdminAlbumListsPage()
+    {
+        if (isset($_GET[\Settings::SECRET_ADMIN_URL."/".self::$adminListsURI])) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function getAlbumToDelete()
+    {
+        if ($this->onDeleteListPage()) {
+            return $_GET[\Settings::SECRET_ADMIN_URL."/".self::$adminListsURI."/".self::$removeListURI];
+        }
+    }
+
+    public function onDeleteListPage()
+    {
+        if (isset($_GET[\Settings::SECRET_ADMIN_URL."/".self::$adminListsURI."/".self::$removeListURI])) {
+            return true;
+        }
+
+        return false;
     }
 
     public function onYearPage()

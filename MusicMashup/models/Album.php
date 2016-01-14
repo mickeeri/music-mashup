@@ -38,21 +38,25 @@ class Album
             throw new \AlbumPositionException();
         }
 
-        if (is_numeric($position) === false || $position < 2000 || $position > date("Y")) {
+        if (is_numeric($position) === false || intval($position) < 1 || intval($position) > 10) {
             throw new \AlbumPositionException();
+        }
+
+        if (is_string($cover) === false || $cover === "") {
+            throw new \InvalidCoverException;
         }
 
         // Sanatize and assings values.
         $this->name = filter_var($name, FILTER_SANITIZE_STRING);
         $this->artist = filter_var($artist, FILTER_SANITIZE_STRING);
         $this->position = filter_var($position, FILTER_SANITIZE_STRING);
+        $this->cover = filter_var($cover, FILTER_SANITIZE_STRING);
 
         // If not provided, get spotifyURI from Spotify Api.
         $this->webService = new \models\WebServiceModel();
-        $this->spotifyURI = $spotifyURI;
+        //$this->spotifyURI = $spotifyURI;
 
         if (!$spotifyURI) {
-
             $this->spotifyURI = $this->webService->getAlbumSpotifyURI($this->artist, $this->name);
         } else {
 
@@ -62,29 +66,13 @@ class Album
 
             $this->spotifyURI = $spotifyURI;
         }
-
-        // If no cover scr is provided, fetch one from api.
-        if ($cover === "" || $cover === null) {
-            // Using other api method to get more info about album.
-            $additionalAlbumInfo = $this->getContentFromWebService();
-
-            // Returns default img if not set.
-            if (!isset($additionalAlbumInfo->album)) {
-                $this->cover = $additionalAlbumInfo;
-            } else {
-                $this->cover = filter_var($additionalAlbumInfo->album->image[2]->{"#text"}, FILTER_SANITIZE_STRING);
-            }
-
-        } else {
-            $this->cover = $cover;
-        }
     }
 
-    private function getContentFromWebService()
-    {
-        $wsm = new \models\WebServiceModel();
-        return $wsm->getAlbumInfo($this->artist, $this->name);
-    }
+//    private function getContentFromWebService()
+//    {
+//        $wsm = new \models\WebServiceModel();
+//        return $wsm->getAlbumInfo($this->artist, $this->name);
+//    }
 
     public function setAlbumID($albumID)
     {

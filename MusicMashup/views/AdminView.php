@@ -5,20 +5,14 @@ namespace views;
 
 class AdminView
 {
-//    private static $newListUrl = \Settings::SECRET_ADMIN_URL . "/newtopten";
-//
-//
-//    // Input id:s
-//    private static $yearInputID = "year";
-//    private static $artistInputID = "artist";
-//    private static $recordInputID = "record";
-//    private static $submitButton = "submit";
     private $numerOfAlbumsInList = 2;
 
     public function response ()
     {
-        return $this->generateCreateListForm() . $this->generateAlbumSearchForm()
-            . $this->generateAlbumsOfTheYearList();
+        return
+            '<a href="?'.$_SERVER['QUERY_STRING'].'/'.NavigationView::$adminListsURI.'">Se alla listor</a>
+            '.$this->generateCreateListForm() . $this->generateAlbumSearchForm()
+            .$this->generateAlbumsOfTheYearList();
 
     }
 
@@ -35,8 +29,8 @@ class AdminView
                 <form id="create-list-form">
                     <div class="row">
                         <div class="input-field">
-                            <input id="source" type="text" class="validate browser-default">
-                            <label for="source">Källa</label>
+                            <input id="source" type="text" class="validate">
+                            <label class="active" for="source">Källa</label>
                         </div>
                     </div>
                     <div class="row">
@@ -64,9 +58,10 @@ class AdminView
     private function generateAlbumSearchForm()
     {
         return
-        '<div class="row">
+        '<div class="row">            
             <div class="col s12 m8 offset-m2">
                 <h4 id="find-album-header">2. Hitta album</h4>
+                <small>powered by </small><a href="http://www.last.fm/"><img id="last-fm-logo" src="images/Last.fm_Logo_Black.png" alt="Logga från last.fm"></a>
                 <div id="search-form-message" style="display:none;"></div>
                 <form id="album-form" method="post">
                     <div class="row">

@@ -12,7 +12,6 @@ class Facade
         // Setting up database.
         try {
             $this->db = new \PDO(\Settings::DSN, \Settings::USERNAME, \Settings::PASSWORD);
-            //$this->db = new \PDO("mysql:dbname=albumsoftheyear;host=localhost;port=8889, root, root");
             $this->db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
         } catch (\PDOException $e) {
             http_response_code(500);
@@ -31,12 +30,30 @@ class Facade
        try {
            $this->dal->addList($list);
            http_response_code(200);
-           echo "Din lista har sparats.";
+           echo "Listan är sparad";
        } catch (\Exception $e) {
            http_response_code(500);
            echo $e->getMessage();
            exit;
        }
+    }
+
+    public function getYearsAndLists()
+    {
+        try {
+
+            $yearArr = array();
+
+            foreach ($this->getYears() as $year) {
+                array_push($yearArr, new \models\Year($year, $this->getListsForYear($year)));
+            }
+
+            return $yearArr;
+
+
+        } catch (\PDOException $e) {
+            throw new \FetchAlbumListsException();
+        }
     }
 
     /**
@@ -61,6 +78,8 @@ class Facade
         return $this->dal->getListByID($listID);
     }
 
-
-
+    public function deleteList($listID)
+    {
+        $this->dal->deleteListByID($listID);
+    }
 }
