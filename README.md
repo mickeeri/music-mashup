@@ -20,10 +20,19 @@ Min applikation syftar till att - så som det är beskrivet i projektidén - att
 ### Schematisk bild över applikationens beståndsdelar
 
 ### Säkerhet och prestanda
+För att öka prestanda kontrollerar jag att så mycket som möjligt cachas. Nu är det bara html-dokumenten själv som jag inte kan få att cachas, även om jag specifierar en cache-control i headern. Jag gör även sådana självklara saker som att placera stilmallar i början och javascript i slutet. 
+
+Angående säkerhet är jag noggrann med att validera och filtrera data som kommer från användaren och webbtjänsterna. 
 
 ### Offline-first 
-Min ambition var inte att det skulle gå att göra saker på sidan även om den var offline, snarare att användaren skulle bli notifierad om att denne inte hade uppkoppling och inte behöva förlora data eller möta webbläsarens felsida (dinosaurien i Chrome t.ex.). För detta hittade jag en [artikel om application cache](http://www.html5rocks.com/en/tutorials/appcache/beginner/) och började sätta igång. Det verkade riktigt lovande från början. Application cache låter en cacha alla sidor som användaren har besökt tidigare, samt stilmallar, JavaScript, bilder mm. Det gjorde att det var svårt att märka att man ens var offline. Men det visade sig snabbt ha sina baksidor. När användaren åter är online laddas fortfarande innehållet från application cachet, även om innehållet är uppdaterat. Innhållet uppdateras endast om manifest-filen (där man specificerar vad som ska cachas) ändras. Efter att ha läst [följande artikel](http://alistapart.com/article/application-cache-is-a-douchebag) beslutade jag mig för att ge upp det. Så som det ser ut nu har jag en lite jQuery-metod som skickar ett ajax-anrop med jämna mellanrum. Om anropet misslyckas utgår den från att användaren är offline och presenterar ett felmeddelande. 
+Min ambition var inte att det skulle gå att göra saker på sidan även om den var offline, snarare att användaren skulle bli notifierad om att denne inte hade uppkoppling samt inte behöva förlora data eller möta webbläsarens felsida (dinosaurien i Chrome t.ex.). För detta hittade jag en [artikel om application cache](http://www.html5rocks.com/en/tutorials/appcache/beginner/) och började sätta igång. Det verkade riktigt lovande från början. Application cache låter en cacha alla sidor som användaren har besökt tidigare, samt stilmallar, JavaScript, bilder mm. Det gjorde att det gick att surfa ganska obehindrat på siten även om man var nedkopplad. Men det visade sig snabbt ha sina baksidor. När användaren åter är online laddas fortfarande innehållet från application cachet, även om innehållet är uppdaterat. Innhållet uppdateras endast om manifest-filen (där man specificerar vad som ska cachas) ändras. Efter att ha läst [följande artikel](http://alistapart.com/article/application-cache-is-a-douchebag) beslutade jag mig för att ge upp det. Så som det ser ut nu har jag en lite jQuery-metod som skickar ett ajax-anrop med jämna mellanrum. Om anropet misslyckas utgår den från att användaren är offline och presenterar ett felmeddelande. 
 
 ### Risker 
+Begränsad filtrering/sanitering av input som mottas och presenteras på klienten, dvs i JavaScript metoder. 
+
+Inget token i formuläret för att motverka CSRS. 
+
+Ingen inloggning, utan bara en hemlig url för att komma åt administratörsrättigheter. 
 
 ### Egen reflektion
+Jag gjorde några misstag angående val av tekniker. Att bygga ett formulär i JavasScript och använda ajax för att lägga in det i databasen har många fördelar. Det går snabbt och man slipper ladda om sidan mm. Men det är också krånligt, och om något går fel på serversidan var det svårt att få något relevant felmeddalande. I efterhand skulle jag inte ha skapat ett sådant formulär överhuvudtaget, utan istället försökt skrapa några utvalda musiksidor och försöka automatisera detta så mycket som möjligt. 
