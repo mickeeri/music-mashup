@@ -11,4 +11,18 @@ Det finns mig veterligen inget api som tillhandahåller sådana listor, vilket g
 * [Årsbästalista från Pitchfork](http://pitchfork.com/features/staff-lists/9764-the-50-best-albums-of-2015/)
 * [Spotify's API för spellistor](https://developer.spotify.com/web-api/)
 * [YouTube för musikvideos](https://developers.google.com/youtube/v3/)
-* [Metadata från Last.fm](http://www.last.fm/api)
+* [Metadata från Last.fm](http://www.last.fm/api) 
+
+## Projektrapport 
+### Inledning
+Min applikation syftar till att - så som det är beskrivet i projektidén - att snabbt och enkelt kunna lägga in listor med de bästa musikalbumen från ett särkilt år enligt en rad olika källor t.ex. Rolling Stones Magazine, The Guardian m.fl. Teknikerna som används är PHP 7.0, JavaScript och en MySQL databas. Sökning efter album sker med ett API från [Last.fm](http://www.last.fm/api). Jag använder även [Spotify](https://developer.spotify.com/web-api/) för att hämta spellistor för varje album. 
+
+### Schematisk bild över applikationens beståndsdelar
+
+### Säkerhet och prestanda
+
+### Offline-first 
+
+### Risker 
+
+### Egen reflektion
