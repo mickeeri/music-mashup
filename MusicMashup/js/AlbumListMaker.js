@@ -221,9 +221,9 @@ AlbumListMaker.prototype.displaySearchResults = function(albumMatches) {
     resultsDiv.empty();
 
     resultsDiv.append(
-        "<div class='col s12 m8 offset-m2'>" +
-            "<h4>Search results</h4>" +
-            "<p>Click to select album for place "+this.albumNumber+".</p>" +
+        "<div class='col s12 m12'>" +
+            "<h4>Sökresultat</h4>" +
+            "<p>Klicka på plusset för att lägga till album på plats <strong>"+this.albumNumber+"</strong></p>" +
             "<ul id='result-list' class='collection'></ul>" +
         "</div>"
     );
@@ -238,6 +238,8 @@ AlbumListMaker.prototype.displaySearchResults = function(albumMatches) {
         // Presentation of search result.
         $("#result-list").append(
             "<li class='collection-item avatar search-result-li'>" +
+                "<input type='hidden' value='"+album.name+"'>"  +
+                "<a class='btn-floating btn waves-effect waves-light red right add-album'><i class='material-icons'>add</i></a>" +
                 "<img src='"+imageSrc+"' alt='Album cover art' class='circle'>" +
                 "<span class='title'>"+album.name+"</span>" +
                 "<p class='artist'>"+album.artist+"</p>" +
@@ -249,12 +251,14 @@ AlbumListMaker.prototype.displaySearchResults = function(albumMatches) {
     resultsDiv.fadeIn("slow");
 
     // Event handler for when user selects on of the results.
-    $(".search-result-li").click(function () {
-        that.selectAlbum(this);
+    $(".add-album").click(function () {
+        that.selectAlbum($(this).parent());
     });
 };
 
 AlbumListMaker.prototype.selectAlbum = function(clickedAlbumListItem) {
+
+    console.log(this.albumNumber);
 
     // Adds album to top list.
     this.addAlbumToList(clickedAlbumListItem);
@@ -328,20 +332,12 @@ AlbumListMaker.prototype.getAlbumsFromTopList = function (selectedAlbums) {
     // Iterates to list of top albums builds object and adds to array.
     $(selectedAlbums).each(function () {
 
-
         var name = $(this).find(".title").text();
         var artist = $(this).find(".artist").text();
         var position = $(this).find(".album-order-number").text();
         var cover = $(this).find("img").attr('src');
 
         var album = new Album(name, artist, position, cover);
-
-        //var album = {
-        //    name: name,
-        //    artist: artist,
-        //    position: position
-        //};
-        //console.log(album);
 
         // If something wrong Album class returns array with errors instead of object.
         if (Array.isArray(album) === false) {
@@ -377,17 +373,8 @@ AlbumListMaker.prototype.saveList = function (albums) {
         that.displayMessage(messageDiv, that.messageTypeSuccess, "Listan sparad utan problem!");
         $("#save-list-button").attr("disabled", true);
         // TODO: länk för att ladda om sidan.
-        //$(messageDiv).removeClass("error");
-        //$(messageDiv).addClass("success");
-        //$(messageDiv).text("List saved without problem!");
-        //$("#save-list-button").attr("disabled", true);
 
     }).fail(function(response){
-
-        //$(messageDiv).removeClass("success");
-        //$(messageDiv).addClass("error");
-        //
-        console.log(response);
 
         var errorMessage = "";
 
@@ -403,17 +390,7 @@ AlbumListMaker.prototype.saveList = function (albums) {
 
     }).always(function (response) {
 
-        console.log("Always: " + response);
-
-        //// Displays feedback message.
-        //$(messageDiv).show("fast");
-        //$(messageDiv).click(function () {
-        //    $(this).hide("fast");
-        //});
-        //
-        //if (response.responseText !== "") {
-        //    $(messageDiv).text(response.responseText);
-        //}
+        console.log(response);
     });
 };
 

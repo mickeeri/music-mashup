@@ -74,9 +74,9 @@ nav {
     border-right: 1px solid white;
 }
 
-#result-list .collection-item {
-    cursor: pointer;
-}
+/*#result-list .collection-item {*/
+    /*cursor: pointer;*/
+/*}*/
 
 /* AlbumListView */
 
@@ -119,7 +119,7 @@ nav {
 #save-message, #create-list-messages, #search-form-message, .offline-message, .error-div {
     padding: 20px;
     border: 1px solid #B0BEC5;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
     /*-webkit-border-radius: 10px;*/
     /*-moz-border-radius: 10px;*/
     /*border-radius: 10px;*/

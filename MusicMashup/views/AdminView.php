@@ -16,10 +16,11 @@ class AdminView
 
     }
 
+    /**
+     * @return string html with form for creating list.
+     */
     private function generateCreateListForm()
     {
-        // TODO: Gör det möjligt att ange en länk till listan.
-
         return
         '<div class="row">
             <div class="col s12 m8 offset-m2">
@@ -55,6 +56,9 @@ class AdminView
         </div>';
     }
 
+    /**
+     * @return string html with search form for searching for albums.
+     */
     private function generateAlbumSearchForm()
     {
         return
@@ -80,6 +84,9 @@ class AdminView
         ';
     }
 
+    /**
+     * @return string html with empty list of top albums.
+     */
     private function generateAlbumsOfTheYearList()
     {
         return
@@ -94,6 +101,9 @@ class AdminView
         </div>';
     }
 
+    /**
+     * @return string
+     */
     private function generateAlbumListItems()
     {
         $ret = "";
@@ -109,6 +119,10 @@ class AdminView
 
     }
 
+    /**
+     * Generates option fields for year select.
+     * @return string
+     */
     private function generateYearOptionField(){
 
         $currentYear = intval(date("Y"));

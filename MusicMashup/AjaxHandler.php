@@ -16,12 +16,14 @@ require_once ("models/Exceptions.php");
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 
-    // Check if secret url is set.
-    if (!isset($_GET[\Settings::SECRET_ADMIN_URL])) {
-        http_response_code(403);
-        echo "Du har inte rättighter att lägga till listor.";
-        exit;
-    }
+//    // Check if secret url is set.
+//    if (isset($_GET[\Settings::SECRET_ADMIN_URL]) === false) {
+//
+//        http_response_code(403);
+//        var_dump($_POST);
+//        echo "Du har inte rättighter att lägga till listor.".
+//        exit;
+//    }
 
 
     $year = $_POST["year"];

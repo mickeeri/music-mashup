@@ -30,19 +30,18 @@ class AdminController
                 $this->view->setListToDelete($list);
             }
 
-
             if ($this->view->wantsToDelteList()) {
                 $listID = $this->view->getListToDelete();
                 $this->facade->deleteList($listID);
                 var_dump("List removed");
             }
 
-
-
             $years = $this->facade->getYearsAndLists();
             $this->view->setYears($years);
 
         } catch (\FetchAlbumListsException $e) {
+
+        } catch (\Exception $e) {
 
         }
     }

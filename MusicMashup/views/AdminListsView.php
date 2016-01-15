@@ -12,8 +12,7 @@ class AdminListsView
 
     public function response()
     {
-
-
+        // Either show the list or delete confirmation form if user has asked to delete list.
         if (isset($this->listToDelete)) {
             return $this->renderDeleteListConfirmation($this->listToDelete);
         } else {
@@ -21,6 +20,10 @@ class AdminListsView
         }
     }
 
+    /**
+     * Render the years and lists for each year.
+     * @return string html
+     */
     private function renderYears()
     {
         $ret = '<h4>Alla topplistor</h4>
@@ -38,6 +41,10 @@ class AdminListsView
         return $ret;
     }
 
+    /**
+     * @param array $lists
+     * @return string html
+     */
     private function renderLists($lists)
     {
         $ret = '';
@@ -54,6 +61,7 @@ class AdminListsView
     }
 
     /**
+     * Display confirmation form for removal of list.
      * @param \models\AlbumsOfTheYearList $list
      * @return string
      */
@@ -61,15 +69,23 @@ class AdminListsView
     {
         return
             '<div class="row">
-                <p class="flow-text">Är du säker på att du vill radera listan från '.$list->getSource().'('.$list->getYear().')?</p>
-                <a class="btn waves-effect waves-light indigo darken-2" href="?'.\Settings::SECRET_ADMIN_URL.'/'.NavigationView::$adminListsURI.'">Nej, gå tillbaka</a>
-                <form method="post">
-                    <input type="hidden" name="'.self::$postDeleteList.'" value="'.$list->getListID().'">
-                    <input class="btn waves-effect waves-light indigo darken-2" type="submit" value="Ja jag är säker">
-                </form>
+                <p class="flow-text">Är du säker på att du vill radera listan från '.$list->getSource().' ('.$list->getYear().')?</p>
+                    <div class="col s6 m2">
+                    <a class="btn" href="?'.\Settings::SECRET_ADMIN_URL.
+                            '/'.NavigationView::$adminListsURI.'">Avbryt</a>
+                    </div>
+                <div class="col s6 m2">
+                    <form method="post">
+                        <input type="hidden" name="'.self::$postDeleteList.'" value="'.$list->getListID().'">
+                        <input class="btn" type="submit" value="Ja">
+                    </form>
+                </div>
             </div>';
     }
 
+    /**
+     * @param array $years
+     */
     public function setYears($years)
     {
         $this->years = $years;
@@ -83,6 +99,9 @@ class AdminListsView
         $this->listToDelete = $list;
     }
 
+    /**
+     * @return bool true if user has asked to delete list.
+     */
     public function wantsToDelteList()
     {
         if (isset($_POST[self::$postDeleteList])) {
