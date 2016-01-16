@@ -1,7 +1,4 @@
-### Obs. Jag har inte hunnit bli klar. Lämnar in fullständigt projekt i helgen. 
-
-# 1dv449_projekt
-Projekt i kursen Webbteknik II (1dv449)
+### Projekt i kursen Webbteknik II (1dv449)
 
 ## Projektidé
 Nu när årskiftet närmar sig kommer det som för många musikintresserade är en stor höjdpunkt, nämligen alla årsbästalistor med bästa album, bästa låtar etc. För mig brukar de ligga till grund för mycket av musiklyssnadendet även under nästkommande år. Problemet är att det är svårt att få en bra överblick. Därför vill jag göra en applikation som samlar flera årsbästalistor. 
@@ -17,9 +14,10 @@ Det finns mig veterligen inget api som tillhandahåller sådana listor, vilket g
 
 ## Projektrapport 
 ### Inledning
-Min applikation syftar till att - så som det är beskrivet i projektidén - att snabbt och enkelt kunna lägga in listor med de bästa musikalbumen från ett särkilt år enligt en rad olika källor t.ex. Rolling Stones Magazine, The Guardian m.fl. Teknikerna som används är PHP 7.0, JavaScript och en MySQL databas. Sökning efter album sker med ett API från [Last.fm](http://www.last.fm/api). Jag använder även [Spotify](https://developer.spotify.com/web-api/) för att hämta spellistor för varje album. 
+Min applikation syftar till att - så som det är beskrivet i projektidén - att snabbt och enkelt kunna lägga in listor med de bästa musikalbumen från ett särkilt år enligt en rad olika källor t.ex. Rolling Stones Magazine, The Guardian m.fl. Teknikerna som används är PHP 7.0, JavaScript och en MySQL databas. Sökning efter album sker med ett API från [Last.fm](http://www.last.fm/api). Jag använder även [Spotify](https://developer.spotify.com/web-api/) för att hämta spellistor för varje album. Som front-end ramverk använder jag [Materialize](http://materializecss.com/).
 
 ### Schematisk bild över applikationens beståndsdelar
+
 
 ### Säkerhet och prestanda
 För att öka prestanda kontrollerar jag att så mycket som möjligt cachas. Nu är det bara html-dokumenten själv som jag inte kan få att cachas, även om jag specifierar en cache-control i headern. Jag gör även sådana självklara saker som att placera stilmallar i början och javascript i slutet. 
