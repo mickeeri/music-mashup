@@ -37,7 +37,7 @@ class AdminView
                     </div>
                     <div class="row">
                         <div class="input-field">
-                            <input id="link" type="text" class="validate">
+                            <input id="link" type="url" class="validate">
                             <label for="link">Länk till källa</label>
                         </div>
                     </div>
@@ -93,7 +93,7 @@ class AdminView
         return
         '<div class="row">
             <div id="album-list-div" class="col s12 m12">
-                <h4>New top '.$this->numerOfAlbumsInList.'</h4>
+                <h4>Ny topp '.$this->numerOfAlbumsInList.' lista</h4>
                 <div id="save-message" style="display: none;"></div>
                 <ul id="top-albums" class="collection">
                     '.$this->generateAlbumListItems().'

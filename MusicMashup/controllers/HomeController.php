@@ -2,8 +2,7 @@
 
 namespace controllers;
 
-require_once ("views/ListView.php");
-require_once ("models/AlbumsOfTheYearList.php");
+require_once ("models/AlbumList.php");
 require_once ("models/Album.php");
 
 

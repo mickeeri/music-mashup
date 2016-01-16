@@ -45,7 +45,7 @@ class HomeView
     {
         $ret = '';
 
-        /** @var \models\AlbumsOfTheYearList $list */
+        /** @var \models\AlbumList $list */
         foreach ($lists as $list) {
             $ret .=
                 '<div class="col s12 m6 l4">

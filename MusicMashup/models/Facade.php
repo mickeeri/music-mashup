@@ -23,9 +23,9 @@ class Facade
 
     /**
      * Save Album List. Called from AjaxHandler.php.
-     * @param AlbumsOfTheYearList $list
+     * @param AlbumList $list
      */
-    public function saveList(AlbumsOfTheYearList $list)
+    public function saveList(AlbumList $list)
     {
        try {
            $this->dal->addList($list);
@@ -73,11 +73,11 @@ class Facade
 
     public function getListsForYear($year)
     {
-//        try {
+        try {
             return $this->dal->getListsForYear($year);
-//        } catch (\Exception $e) {
-//            throw new \GetDataException();
-//        }
+        } catch (\Exception $e) {
+            throw new \GetDataException();
+        }
 
     }
 

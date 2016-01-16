@@ -18,7 +18,7 @@ class AlbumListDAL
         $this->db = $db;
     }
 
-    public function addList(\models\AlbumsOfTheYearList $list)
+    public function addList(\models\AlbumList $list)
     {
         $this->checkIfListExists($list->getSource(), $list->getYear());
 
@@ -108,7 +108,7 @@ class AlbumListDAL
             $source = $row['source'];
             $link = $row['link'];
 
-            $list = new \models\AlbumsOfTheYearList($y, $source, $link, "");
+            $list = new \models\AlbumList($y, $source, $link, "");
             $list->setListID($listID);
 
             array_push($lists, $list);
@@ -124,7 +124,7 @@ class AlbumListDAL
         $stmt->setFetchMode(\PDO::FETCH_OBJ);
         $row = $stmt->fetch();
         $albums = $this->getAlbumsByListID($row->listID);
-        $list = new \models\AlbumsOfTheYearList($row->year, $row->source, $row->link, $albums);
+        $list = new \models\AlbumList($row->year, $row->source, $row->link, $albums);
         $list->setListID($listID);
         return $list;
     }

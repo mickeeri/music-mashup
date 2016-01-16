@@ -5,7 +5,7 @@ namespace views;
 
 class AlbumListView
 {
-    /** @var \models\AlbumsOfTheYearList $albumList */
+    /** @var \models\AlbumList $albumList */
     private $albumList;
     private $errorMessage;
 
@@ -46,7 +46,6 @@ class AlbumListView
                 '<div class="row album-row">
                     <div class="row">
                         <h5>'.$album->getPosition().'. '.$album->getArtist().' - '.$album->getName().'</h5>
-
                     </div>
                     <div class="row">
                         <div class="col s12 m6">
@@ -67,7 +66,7 @@ class AlbumListView
         if (!$spotifyURI) {
             return "Spellista saknas.";
         } else {
-            return '<a href="'.$spotifyURI.'"><img class="spotify-loggo" src="images\listen_on_spotify-black.svg"
+            return '<a href="'.$spotifyURI.'"><img class="spotify-loggo" src="images/listen_on_spotify-black.svg"
                     alt="Klicka för att lyssna på spotify."/></a>';
         }
     }

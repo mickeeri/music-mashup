@@ -1,7 +1,7 @@
 <?php
 
 
-require_once("models/AlbumsOfTheYearList.php");
+require_once("models/AlbumList.php");
 require_once("models/Facade.php");
 require_once("models/Album.php");
 require_once("models/AlbumListDAL.php");
@@ -14,19 +14,6 @@ if (true) {
 }
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
-//    var_dump($_SERVER);
-//    exit;
-
-//    // Check if secret url is set.
-//    if (isset($_GET[\Settings::SECRET_ADMIN_URL]) === false) {
-//
-//        http_response_code(403);
-//        var_dump($_POST);
-//        echo "Du har inte rättighter att lägga till listor.".
-//        exit;
-//    }
-
 
     $year = $_POST["year"];
     $source = $_POST["source"];
@@ -61,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     try {
         // Creating list and inserting albums.
-        $yearList = new \models\AlbumsOfTheYearList($year, $source, $link, $albumsAsPHPObjects);
+        $yearList = new \models\AlbumList($year, $source, $link, $albumsAsPHPObjects);
     } catch (\Exception $e) {
         http_response_code(500);
         echo $e->getMessage();

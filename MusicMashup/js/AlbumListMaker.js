@@ -159,7 +159,7 @@ AlbumListMaker.prototype.displaySearchResults = function(albumMatches) {
 
 AlbumListMaker.prototype.selectAlbum = function(clickedAlbumListItem) {
 
-    console.log(this.albumNumber);
+
 
     // Adds album to top list.
     this.addAlbumToList(clickedAlbumListItem);

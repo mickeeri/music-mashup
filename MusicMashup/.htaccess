@@ -1,5 +1,4 @@
-AddType text/cache-manifest .appcache
-
+php_value display_errors on
 #<FilesMatch ".(html|htm)$">
 #    Header set Cache-Control "max-age=14400, public, must-revalidate"
 #</FilesMatch>

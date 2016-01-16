@@ -58,7 +58,7 @@ class AdminListsView
     {
         $ret = '';
 
-        /** @var \models\AlbumsOfTheYearList $list */
+        /** @var \models\AlbumList $list */
         foreach ($lists as $list) {
             $ret .= '<li class="collection-item">'.$list->getSource().'<a href="'.$_SERVER['REQUEST_URI'].'/'.NavigationView::$removeListURI.'='.$list->getListID().'">
             <i class="material-icons right hoverable">delete</i></a></li>';
@@ -71,7 +71,7 @@ class AdminListsView
 
     /**
      * Display confirmation form for removal of list.
-     * @param \models\AlbumsOfTheYearList $list
+     * @param \models\AlbumList $list
      * @return string
      */
     private function renderDeleteListConfirmation($list)
@@ -101,7 +101,7 @@ class AdminListsView
     }
 
     /**
-     * @param \models\AlbumsOfTheYearList $list
+     * @param \models\AlbumList $list
      */
     public function setListToDelete($list)
     {
@@ -144,5 +144,4 @@ class AdminListsView
                     '.$message.'
                 </div>';
     }
-    
 }

@@ -2,7 +2,7 @@ $(document).ready(function () {
 
     // Shows spinner when loading list.
     $('.list-link').click(function () {
-        $(this).parent().parent().append('<img class="spinner" src="images/spinner.gif" />');
+        $(this).parent().parent().append('<img class="spinner" src="images/spinner.GIF" />');
     });
 
     // Removes error message if empty.
