@@ -34,11 +34,12 @@ Angående säkerhet validerar jag och filterar sådant som kommer från använda
 Min ambition var inte att det skulle gå att göra saker på sidan även om den var offline, snarare att användaren skulle bli notifierad om att denne inte hade uppkoppling samt inte behöva förlora data eller möta webbläsarens felsida (dinosaurien i Chrome t.ex.). För detta hittade jag en [artikel om application cache](http://www.html5rocks.com/en/tutorials/appcache/beginner/) och började sätta igång. Det verkade riktigt lovande från början. Application cache låter en cacha alla sidor som användaren har besökt tidigare, samt stilmallar, JavaScript, bilder mm. Det gjorde att det gick att surfa ganska obehindrat på siten även om man var nedkopplad. Men det visade sig snabbt ha sina baksidor. När användaren åter är online laddas fortfarande innehållet från application cachet, även om innehållet är uppdaterat. Innhållet uppdateras endast om manifest-filen (där man specificerar vad som ska cachas) ändras. Efter att ha läst [följande artikel](http://alistapart.com/article/application-cache-is-a-douchebag) beslutade jag mig för att ge upp det. Så som det ser ut nu har jag en liten jQuery-metod som skickar ett ajax-anrop med jämna mellanrum. Om anropet misslyckas utgår den från att användaren är offline och presenterar ett felmeddelande. I demonstrationsfilmen visar jag ett scenario där uppkopplingen förloras under tiden man arbetar med att skapa nya listor. 
 
 ### Risker 
-Begränsad filtrering/sanitering av input som mottas och presenteras på klienten, dvs i JavaScript metoder. 
+När användaren söker efter album visas dessa i dokumentet som sökresultat. Jag har inte hittat någon hundra procent säker metod att filtera/escapa dessa strängar i JavaScript, vilket gör att det eventuellt går att få in skadlig kod. 
 
-Inget token i formuläret för att motverka CSRS. 
+Jag använder inte heller "synchronizer token pattern" i formuläret. 
 
-Ingen inloggning, utan bara en hemlig url för att komma åt administratörsrättigheter. 
+För att lägga till listor behöver man vara "administratör" vilket sker genom att man har tillgång till ett hemligt url. Det är inte lika säkert som en korrekt implementerad inloggning. 
+
 
 ### Egen reflektion
-Jag gjorde några misstag angående val av tekniker. Att bygga ett formulär i JavasScript och använda ajax för att lägga in det i databasen har många fördelar. Det går snabbt och man slipper ladda om sidan mm. Men det är också krånligt, och om något går fel på serversidan var det svårt att få något relevant felmeddalande. I efterhand skulle jag inte ha skapat ett sådant formulär överhuvudtaget, utan istället försökt skrapa några utvalda musiksidor och försöka automatisera detta så mycket som möjligt. 
+Jag gjorde några misstag angående val av tekniker. Att bygga ett formulär i JavasScript och använda ajax för att lägga in det i databasen har många fördelar. Det går snabbt och man slipper ladda om sidan mm. Men det är också krångligt, och om något går fel på serversidan var det svårt att få något relevant felmeddelande. I efterhand skulle jag inte ha skapat ett sådant formulär överhuvudtaget, utan istället försökt skrapa några utvalda musiksidor och försöka automatisera detta så mycket som möjligt. 
