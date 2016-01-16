@@ -116,7 +116,7 @@ nav {
 }
 
 /* Success/Error Messages */
-#save-message, #create-list-messages, #search-form-message, .offline-message, .error-div {
+#save-message, #create-list-messages, #search-form-message, .offline-message, .error-div, .success-div {
     padding: 20px;
     border: 1px solid #B0BEC5;
     margin-bottom: 30px;
@@ -151,6 +151,10 @@ nav {
 }
 
 /* Search form */
-#last-fm-logo {
+#last-fm-logo, .last-fm-logo{
     width: 60px
+}
+
+.search-result-li {
+    min-height: 0 !important;
 }

@@ -16,7 +16,7 @@ class LayoutView
 		        <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 		        <link href="css/style.css" rel="stylesheet">
 		        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">
-		        <title>Top lists</title>
+		        <title>Årsbästalistorna</title>
 		        <meta http-equiv="X-UA-Compatible" content="IE=edge">
 		        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 		  	</head>
@@ -34,6 +34,8 @@ class LayoutView
 		        <script src="//cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script>
                 <script type="text/javascript" src="js/AlbumListMaker.js"></script>
                 <script type="text/javascript" src="js/Service.js"></script>
+                <script type="text/javascript" src="js/AlbumList.js"></script>
+                <script type="text/javascript" src="js/Album.js"></script>
 	       	</body>
 	    </html>
 	  	';

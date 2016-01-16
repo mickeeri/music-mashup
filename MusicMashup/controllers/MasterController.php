@@ -8,7 +8,7 @@ require_once ("views/AdminView.php");
 require_once ("views/AlbumListView.php");
 require_once ("views/AdminListsView.php");
 
-
+// Models
 require_once ("models/Facade.php");
 require_once ("models/AlbumListDAL.php");
 
@@ -17,6 +17,7 @@ require_once ("controllers/AdminController.php");
 require_once ("controllers/HomeController.php");
 require_once ("controllers/ListController.php");
 
+// Controller that decides which view and controller to instanciate.
 class MasterController
 {
     private $navigationView;
@@ -33,12 +34,9 @@ class MasterController
         $this->navigationView->setYears($this->facade->getYears());
 
 
+        // Adminview is the form for adding new list.
         if ($this->navigationView->onAdminPage()) {
-
-            //$this->view = new \views\AdminListsView();
             $this->view = new \views\AdminView();
-            //$controller = new \controllers\AdminController($this->view, $this->facade);
-
         }
 
         elseif ($this->navigationView->onAdminAlbumListsPage() || $this->navigationView->onDeleteListPage()) {
@@ -47,7 +45,7 @@ class MasterController
             $listID = $this->navigationView->getAlbumToDelete();
 
             $this->view = new \views\AdminListsView();
-            $controller = new \controllers\AdminController($this->view, $this->facade);
+            $controller = new \controllers\AdminController($this->view, $this->facade, $this->navigationView);
 
             if (isset($listID)) {
                 $controller->listToDelete = $listID;
@@ -55,7 +53,6 @@ class MasterController
 
             $controller->getLists();
 
-            //$this->view = $controller->getAdminView();
         }
 
         elseif ($this->navigationView->onAlbumListPage()) {
@@ -64,17 +61,14 @@ class MasterController
             $controller->provideAlbumList();
         }
 
-
-
         else {
             $this->view = new \views\HomeView();
             $controller = new \controllers\HomeController($this->view, $this->facade, $this->navigationView);
             $controller->provideTopLists();
         }
-
-        // TODO: close db.
     }
 
+    // Returns view to render.
     public function generateOutput()
     {
         return $this->view;

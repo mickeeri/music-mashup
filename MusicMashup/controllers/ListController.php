@@ -19,24 +19,17 @@ class ListController
     }
 
     /**
-     *
+     * Renders top-lists.
      */
-//    public function provideLists()
-//    {
-//        $year = $this->navigationView->getYearToShow();
-//        $this->view->setLists($this->facade->getListsForYear($year));
-//    }
-
     public function provideAlbumList()
     {
         try {
             $listID = $this->navigationView->getAlbumsToShow();
             $this->view->setAlbumList($this->facade->getListByID($listID));
         } catch (\WebServiceEmptyResultException $e) {
-            $this->view->setErrorMessage("Kunde inte hämta information om albumen från våran web service.");
+            $this->view->setErrorMessage("Kunde inte hämta information om albumen.");
         } catch (\Exception $e) {
             $this->view->setErrorMessage("Ett fel uppstod när albumen skulle hämtas");
         }
-
     }
 }

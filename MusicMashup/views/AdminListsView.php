@@ -9,15 +9,24 @@ class AdminListsView
     private $years;
     private $listToDelete;
     private static $postDeleteList = "deletelist";
+    private $errorMessage;
 
     public function response()
     {
+        $ret = $this->getErrorMessage();
+
+        if (isset($_SESSION[NavigationView::$sessionSaveLocation])) {
+            $ret .= $this->getListDeletedMessage();
+            $_SESSION[NavigationView::$sessionSaveLocation] = null;
+        }
         // Either show the list or delete confirmation form if user has asked to delete list.
         if (isset($this->listToDelete)) {
-            return $this->renderDeleteListConfirmation($this->listToDelete);
+            $ret .= $this->renderDeleteListConfirmation($this->listToDelete);
         } else {
-            return $this->renderYears();
+            $ret .= $this->renderYears();
         }
+
+        return $ret;
     }
 
     /**
@@ -114,6 +123,26 @@ class AdminListsView
     public function getListToDelete()
     {
         return $_POST[self::$postDeleteList];
+    }
+
+    public function getErrorMessage()
+    {
+        if ($this->errorMessage !== "") {
+            return '<div class="error error-div">'.$this->errorMessage.'</div>';
+        }
+    }
+
+    public function setErrorMessage($message)
+    {
+        $this->errorMessage = $message;
+    }
+
+    public function getListDeletedMessage() {
+        $message = $_SESSION[NavigationView::$sessionSaveLocation];
+        return '<div class="success success-div">
+                    <img class="close-message-icon" src="images/close_icon.svg">
+                    '.$message.'
+                </div>';
     }
     
 }

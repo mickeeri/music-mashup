@@ -5,12 +5,13 @@ namespace views;
 
 class AdminView
 {
-    private $numerOfAlbumsInList = 2;
+    private $numerOfAlbumsInList = 5;
 
     public function response ()
     {
         return
-            '<a href="?'.$_SERVER['QUERY_STRING'].'/'.NavigationView::$adminListsURI.'">Se alla listor</a>
+            '   <a href="'.$_SERVER['PHP_SELF'].'">Hem</a>
+             |  <a href="?'.$_SERVER['QUERY_STRING'].'/'.NavigationView::$adminListsURI.'">Se alla listor</a>
             '.$this->generateCreateListForm() . $this->generateAlbumSearchForm()
             .$this->generateAlbumsOfTheYearList();
 
@@ -31,7 +32,7 @@ class AdminView
                     <div class="row">
                         <div class="input-field">
                             <input id="source" type="text" class="validate">
-                            <label class="active" for="source">Källa</label>
+                            <label for="source">Källa</label>
                         </div>
                     </div>
                     <div class="row">

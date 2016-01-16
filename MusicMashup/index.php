@@ -19,7 +19,7 @@ if (\Settings::DISPLAY_ERRORS) {
     ini_set('display_errors', 'ON');
 }
 
-
+session_start();
 
 //d($_SERVER['QUERY_STRING']);
 //d(isset($_GET['admin/albumlist']));

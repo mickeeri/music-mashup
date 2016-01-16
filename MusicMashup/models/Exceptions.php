@@ -15,3 +15,8 @@ class BadResponseCodeException extends \Exception {};
 
 // Facade exceptions
 class FetchAlbumListsException extends \Exception {};
+class GetDataException extends \Exception {};
+class DeleteListException extends \Exception {};
+
+// DB Exceptions
+class ListAlreadyExistsException extends \Exception {};

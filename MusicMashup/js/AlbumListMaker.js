@@ -4,104 +4,6 @@ function init(){
     AlbumListMaker = new AlbumListMaker();
 }
 
-var Album = function(name, artist, position, cover){
-
-    this.name;
-    this.artist;
-    this.position;
-    this.cover;
-
-    var errorMessages = [];
-
-    if (typeof name === "undefined" || name === null || name === "") {
-        errorMessages.push("Albumnamn saknas");
-    } else if (name.length > 100) {
-        errorMessages.push("Albumnamn är för långt.");
-    }
-
-    if (typeof artist === "undefined" || artist === null || artist === "") {
-        errorMessages.push("Artist saknas.");
-    } else if (artist.length > 50) {
-        errorMessages.push("Albumets artist består av för många tecken.");
-    }
-
-    if (typeof position === "undefined" || position === null || position === "") {
-        errorMessages.push("Plats saknas.");
-    } else if (isNaN(position)) {
-        errorMessages.push("Albumets plats måste vara ett nummer.");
-    }
-
-    if (typeof cover === "undefined" || cover === null || cover === "") {
-        // If cover is missing assign default cover.
-        this.cover = "images/default-img.png";
-    } else {
-        this.cover = cover;
-    }
-
-    if (errorMessages.length === 0) {
-        this.name = getEscapedString(name);
-        this.artist = getEscapedString(artist);
-        this.position = getEscapedString(position);
-    } else {
-        return errorMessages;
-    }
-
-    // Basic escape to lower risk of xss.
-    function getEscapedString(string){
-        $("#create-list-messages").text(string);
-        return $("#create-list-messages").text(string).html();
-    }
-};
-
-// Album List object. Retuns array of error messages on failed validation.
-var AlbumList = function (source, link, year) {
-
-
-    this.source;
-    this.link;
-    this.year;
-    // Array of album objects.
-    this.albums = [];
-
-    $(".some-div").text(source);
-    var errorMessages = [];
-
-    if (typeof source === "undefined" || source === null || source === "") {
-        errorMessages.push("Du måste ange källa.");
-    } else if (source.length > 100) {
-        errorMessages.push("Namnet på källan är för långt.");
-    }
-
-    if (typeof link === "undefined" || link === null || link === "") {
-        errorMessages.push("Du måste ange en länk till källan.");
-    } else if (link.length > 150) {
-        errorMessages.push("Länken är för lång.");
-    }
-
-    if (typeof year === "undefined" || year === null || year === "") {
-        errorMessages.push("Du måste välja ett år.");
-    } else if (isNaN(year)) {
-        errorMessages.push("År måste vara ett nummer.");
-    }
-
-    // If error messages is empty assign values.
-    if (errorMessages.length === 0) {
-        this.source = getEscapedString(source);
-        this.link = getEscapedString(link);
-        this.year = getEscapedString(year);
-    } else {
-        return errorMessages;
-    }
-
-    // Basic escape to lower risk of xss.
-    function getEscapedString(string){
-        $("#create-list-messages").text(string);
-        return $("#create-list-messages").text(string).html();
-    }
-};
-
-
-
 var AlbumListMaker = function(){
 
     var that = this;
@@ -109,13 +11,6 @@ var AlbumListMaker = function(){
     var createListForm = $("#create-list-form");
     var albumSearchForm = $("#album-form");
 
-
-    $('#source').focus();
-    //$('#source').select();
-
-    //this.source = "";
-    //this.year = "";
-    //this.link = "";
     this.list;
     this.topAlbums = [];
 
@@ -123,12 +18,16 @@ var AlbumListMaker = function(){
     this.messageTypeError = "error";
 
     // How many albums that is to be in the top list.
-    this.numberOfAlbumsInList = 2;
+    this.numberOfAlbumsInList = 5;
     this.albumNumber = this.numberOfAlbumsInList;
 
     // Disable search field until source and year is set.
     $("#album-search-field").attr("disabled", true);
     $("#album-search-button").attr("disabled", true);
+
+    $("#album-search-field").focus(function() {
+        $(this).select();
+    });
 
 
     // Event listener for first input fields.
@@ -194,6 +93,7 @@ AlbumListMaker.prototype.findAlbums = function () {
     }
 };
 
+// Get search results from web service.
 AlbumListMaker.prototype.getSearchResults = function ($query) {
 
     var that = this;
@@ -213,6 +113,7 @@ AlbumListMaker.prototype.getSearchResults = function ($query) {
     })
 };
 
+// generate search results.
 AlbumListMaker.prototype.displaySearchResults = function(albumMatches) {
 
     var that = this;
@@ -265,9 +166,6 @@ AlbumListMaker.prototype.selectAlbum = function(clickedAlbumListItem) {
 
     // Hides search results.
     $("#results").fadeOut("fast");
-
-    // Display feedback message.
-    //this.displayMessage($("#save-message"), this.messageTypeSuccess, "Album tillagt!");
 
     // Remove active class from current list item.
     $("#album-li-"+this.albumNumber).removeClass("active-li");
@@ -367,37 +265,36 @@ AlbumListMaker.prototype.saveList = function (albums) {
     // Adding albums to already created list.
     this.list.albums = albums;
 
+    console.log(this.list);
 
     $.post("AjaxHandler.php", this.list).done(function(response){
 
+        console.log(response);
+
+        // Post went fine. Show success message and disable save-button.
         that.displayMessage(messageDiv, that.messageTypeSuccess, "Listan sparad utan problem!");
-        $("#save-list-button").attr("disabled", true);
-        // TODO: länk för att ladda om sidan.
+        $("#save-list-button").fadeOut();
+        $('#album-list-div').append('<a id="reload" href="javascript:window.location.href=window.location.href">Lägg till fler listor</a>');
+
 
     }).fail(function(response){
 
         var errorMessage = "";
 
         if (response.responseText !== "") {
-            //$(messageDiv).text("The following error occurred: " + response.responseText);
+
             errorMessage = response.responseText;
         } else {
             errorMessage = ("Ett fel uppstod när listan skulle sparas.");
-            //$(messageDiv).text("An error occurred, please try again.");
         }
 
         that.displayMessage(messageDiv, that.messageTypeError, errorMessage);
 
-    }).always(function (response) {
-
-        console.log(response);
     });
 };
 
+// Creates both error and success messages. Handles both single message and array of messages.
 AlbumListMaker.prototype.displayMessage = function (messageContainer, messageType, messages) {
-
-
-    console.log(messages);
 
     $(messageContainer).empty();
     //$(messageContainer).fadeOut("fast");
@@ -435,7 +332,3 @@ AlbumListMaker.prototype.displayMessage = function (messageContainer, messageTyp
 
 
 window.onload = init();
-
-
-// URL for album info.
-//var url = "http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist="+albumName+"&lang=sv&api_key=c3ec843b6b80acb1bf180a874a95cf59&format=json";

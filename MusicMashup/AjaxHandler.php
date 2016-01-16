@@ -1,6 +1,6 @@
 <?php
 
-// TODO: behöver jag alla dessa, behöver jag då dem i index.php?
+
 require_once("models/AlbumsOfTheYearList.php");
 require_once("models/Facade.php");
 require_once("models/Album.php");
@@ -8,13 +8,15 @@ require_once("models/AlbumListDAL.php");
 require_once ("Settings.php");
 require_once ("models/Exceptions.php");
 
-//if (true) {
-//    error_reporting(-1);
-//    ini_set('display_errors', 'ON');
-//}
+if (true) {
+    error_reporting(-1);
+    ini_set('display_errors', 'ON');
+}
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
+//    var_dump($_SERVER);
+//    exit;
 
 //    // Check if secret url is set.
 //    if (isset($_GET[\Settings::SECRET_ADMIN_URL]) === false) {

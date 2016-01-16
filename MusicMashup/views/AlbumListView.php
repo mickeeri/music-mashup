@@ -12,12 +12,9 @@ class AlbumListView
 
     public function response()
     {
-
         $ret =
             '<div class="row"><a class="btn waves-effect waves-light indigo darken-2"
                 href="'.$_SERVER["PHP_SELF"].'">Tillbaka till listorna</a></div>';
-
-        d($this->errorMessage);
 
         if (isset($this->errorMessage)) {
             $ret .= '<div class="error error-div">'.$this->errorMessage.'</div>';
@@ -27,12 +24,14 @@ class AlbumListView
                     <h4 class="top-list-headline">De bästa albumen '.$this->albumList->getYear().' enligt
                     <a href="'.$this->albumList->getLink().'">'.$this->albumList->getSource().'</a></h4>
                 </div>
-                '.$this->renderAlbums().'';
+                '.$this->renderAlbums().
+                '<small>Albuminformation från <img class="last-fm-logo" src="images/Last.fm_Logo_Black.png"/></small>';
         }
 
         return $ret;
     }
 
+    // Renders all the albums.
     private function renderAlbums()
     {
         $albums = $this->albumList->getAlbums();
@@ -62,31 +61,12 @@ class AlbumListView
         return $ret;
     }
 
-
-//<div class="card">
-//    <div class="card-image">
-//        <img src="' .$album->getCover(). '" alt="Album cover for ' .$album->getName(). '"/>
-//    </div>
-//</div>
-//<div class="card-content">
-//    <span class="card-title">' .$album->getArtist(). '</span>
-//    <p>' .$album->getName(). '</p>
-//    <span class="album-order-number">' .$album->getPosition(). '</span>
-//    </div>
-//</div>
-//</div>
-
+    // Renders link to spotify.
     private function renderAlbumPlaylist($spotifyURI)
     {
         if (!$spotifyURI) {
             return "Spellista saknas.";
         } else {
-//            return '<iframe src="https://embed.spotify.com/?uri='.$spotifyURI.'"
-//                    width="400" height="360" frameborder="0" allowtransparency="true"></iframe>';
-
-//            return '<iframe src="https://embed.spotify.com/?uri='.$spotifyURI.'&theme=white&view=coverart"
-//                    width="300" height="80" frameborder="0" allowtransparency="true"></iframe>';
-
             return '<a href="'.$spotifyURI.'"><img class="spotify-loggo" src="images\listen_on_spotify-black.svg"
                     alt="Klicka för att lyssna på spotify."/></a>';
         }

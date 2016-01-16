@@ -5,7 +5,7 @@ namespace views;
 
 class NavigationView
 {
-    private static $sessionSaveLocation = "\\view\\NavigationView\\message";
+    public static $sessionSaveLocation = "\\view\\NavigationView\\message";
     private static $yearURL = "year";
     public static $adminListsURI = "albumlists";
     private static $listURL = "albumlist";
@@ -26,6 +26,23 @@ class NavigationView
             </nav>
         ';
     }
+
+
+    public function redirectToAdminListView($message) {
+
+
+
+        $queryString = '?'.\Settings::SECRET_ADMIN_URL.'/'.self::$adminListsURI;
+
+   		// Removes index.php from php_self string.
+   		$path = str_replace("index.php", "", $_SERVER['PHP_SELF']);
+
+   		$_SESSION[self::$sessionSaveLocation] = $message;
+
+   		$actual_link = 'http://'.$_SERVER['HTTP_HOST'].$path.$queryString;
+   		header("Location: $actual_link");
+   		exit();
+   	}
 
     public function onAdminPage()
     {

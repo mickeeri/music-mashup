@@ -31,6 +31,10 @@ class Facade
            $this->dal->addList($list);
            http_response_code(200);
            echo "Listan är sparad";
+       } catch (\ListAlreadyExistsException $e) {
+           http_response_code(500);
+           echo 'En lista från '.$list->getYear().' av '.$list->getSource().' finns redan.';
+           exit;
        } catch (\Exception $e) {
            http_response_code(500);
            echo $e->getMessage();
@@ -50,7 +54,6 @@ class Facade
 
             return $yearArr;
 
-
         } catch (\PDOException $e) {
             throw new \FetchAlbumListsException();
         }
@@ -64,22 +67,35 @@ class Facade
         try {
             return $this->dal->getYears();
         } catch (\Exception $e) {
-
+            throw new \GetDataException();
         }
     }
 
     public function getListsForYear($year)
     {
-        return $this->dal->getListsForYear($year);
+//        try {
+            return $this->dal->getListsForYear($year);
+//        } catch (\Exception $e) {
+//            throw new \GetDataException();
+//        }
+
     }
 
     public function getListByID($listID)
     {
-        return $this->dal->getListByID($listID);
+        try {
+            return $this->dal->getListByID($listID);
+        } catch (\Exception $e) {
+            throw new \GetDataException();
+        }
     }
 
     public function deleteList($listID)
     {
-        $this->dal->deleteListByID($listID);
+        try {
+            $this->dal->deleteListByID($listID);
+        } catch (\Exception $e) {
+            throw new \DeleteListException();
+        }
     }
 }
