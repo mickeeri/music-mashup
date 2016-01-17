@@ -6,6 +6,8 @@
 
 [Presentationsfilm](https://www.youtube.com/watch?v=LBUJdVpQHvw&feature=youtu.be&hd=1)
 
+[Rapport](https://github.com/me222wm/1dv449_projekt/blob/master/README.md#projektrapport)
+
 ## Projektidé
 Nu när årskiftet närmar sig kommer det som för många musikintresserade är en stor höjdpunkt, nämligen alla årsbästalistor med bästa album, bästa låtar etc. För mig brukar de ligga till grund för mycket av musiklyssnadendet även under nästkommande år. Problemet är att det är svårt att få en bra överblick. Därför vill jag göra en applikation som samlar flera årsbästalistor. 
 
