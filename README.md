@@ -24,6 +24,8 @@ Det finns mig veterligen inget api som tillhandahåller sådana listor, vilket g
 ### Inledning
 Min applikation syftar till att - så som det är beskrivet i projektidén - att snabbt och enkelt kunna lägga in listor med de bästa musikalbumen från ett särkilt år enligt en rad olika källor t.ex. Rolling Stones Magazine, The Guardian m.fl. Teknikerna som används är PHP 7.0, JavaScript och en MySQL databas. Sökning efter album sker med ett API från [Last.fm](http://www.last.fm/api). Jag använder även [Spotify](https://developer.spotify.com/web-api/) för att hämta spellistor för varje album. Som front-end ramverk använder jag [Materialize](http://materializecss.com/).
 
+Jag använder JavaScript för att söka efter och lägga till album i listan. Dessa skickas sedan till servern via ett ajax-anrop där de sparas i databasen. Anledningen till denna lösning var flexibilitet. Med JavaScript behöver exempelvis inte ladda om sidan. Motiveringen till användningen av Last.fm:s Api för att hitta album är för att det är smart och innehåller all musik man kan tänka sig. Det går exempelvis att skriva "run br" och den hittar albumen "Born to Run" av Bruce Springsteen. 
+
 ### Schematisk bild över applikationens beståndsdelar
 #### Applikationens arkitektur
 ![Applikationens arkitektur](https://github.com/me222wm/1dv449_projekt/blob/master/images/mashup-arkitektur.png)
