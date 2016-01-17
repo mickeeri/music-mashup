@@ -22,9 +22,9 @@ Det finns mig veterligen inget api som tillhandahåller sådana listor, vilket g
 
 ## Projektrapport 
 ### Inledning
-Min applikation syftar till att - så som det är beskrivet i projektidén - att snabbt och enkelt kunna lägga in listor med de bästa musikalbumen från ett särkilt år enligt en rad olika källor t.ex. Rolling Stones Magazine, The Guardian m.fl. Teknikerna som används är PHP 7.0, JavaScript och en MySQL databas. Sökning efter album sker med ett API från [Last.fm](http://www.last.fm/api). Jag använder även [Spotify](https://developer.spotify.com/web-api/) för att hämta spellistor för varje album. Som front-end ramverk använder jag [Materialize](http://materializecss.com/).
+Min applikation syftar till att - så som det är beskrivet i projektidén - att snabbt och enkelt kunna lägga in listor med de bästa musikalbumen från ett särkilt år enligt en rad olika källor t.ex. Rolling Stones Magazine, The Guardian m.fl. Teknikerna som används är PHP 7.0, JavaScript och en MySQL databas. Sökning efter album sker med ett API från [Last.fm](http://www.last.fm/api). Jag använder även [Spotify](https://developer.spotify.com/web-api/) för att hämta spellistor för varje album. För att skapa en någorlunda responsiv och tilltalande sida har jag använt frontend-ramverket [Materialize](http://materializecss.com/).
 
-Jag använder JavaScript för att söka efter och lägga till album i listan. Dessa skickas sedan till servern via ett ajax-anrop där de sparas i databasen. Anledningen till denna lösning var flexibilitet. Med JavaScript behöver exempelvis inte ladda om sidan. Motiveringen till användningen av Last.fm:s Api för att hitta album är för att det är smart och innehåller all musik man kan tänka sig. Det går exempelvis att skriva "run br" och den hittar albumen "Born to Run" av Bruce Springsteen. 
+Jag använder JavaScript för att söka efter och lägga till album i listan. Dessa skickas sedan till servern via ett ajax-anrop där de sparas i databasen. Anledningen till denna lösning var flexibilitet. Med JavaScript behöver exempelvis inte ladda om sidan. Motiveringen till användningen av Last.fm:s Api för att hitta album är för att det är smart och innehåller all musik man kan tänka sig. Det går exempelvis att skriva "run br" och den hittar skivan "Born to Run" av Bruce Springsteen. 
 
 ### Schematisk bild över applikationens beståndsdelar
 #### Applikationens arkitektur
@@ -45,14 +45,14 @@ Min ambition var inte att det skulle gå att göra saker på sidan även om den 
 ### Risker 
 När användaren söker efter album visas dessa i dokumentet som sökresultat. Jag har inte hittat någon hundra procent säker metod att filtera/escapa dessa strängar i JavaScript, vilket gör att det eventuellt går att få in skadlig kod. 
 
-Jag använder inte heller "synchronizer token pattern" i formuläret [5]. 
+Jag använder inte heller "synchronizer token pattern" i formuläret [1, s.14]. 
 
 För att lägga till listor behöver man vara "administratör" vilket sker genom att man har tillgång till ett hemligt url. Det upplevs inte lika säkert som en korrekt implementerad inloggning. 
 
 Applikationen är beroende av att Webbresuerna, särskilt Last.fm, fungerar som de ska. 
 
 ### Egen reflektion
-Jag gjorde några misstag angående val av tekniker. Att bygga ett formulär i JavasScript och använda ajax för att via ett serverspråk lägga in det i databasen har många fördelar. Det går snabbt och man slipper ladda om sidan mm. Men det är också krångligt, och om något går fel på serversidan var det svårt att få något relevant felmeddelande. Det gjorde att jag tvingades skriva mycket extra kod för att validera data både på klient och server. I efterhand skulle jag inte ha skapat ett sådant formulär överhuvudtaget, utan istället försökt skrapa några utvalda musiksidor och försöka automatisera detta så mycket som möjligt. 
+Jag gjorde några misstag angående val av tekniker. Att bygga ett formulär i JavasScript och använda ajax för att via ett serverspråk lägga in det i databasen har många fördelar. Det går snabbt och man slipper ladda om sidan mm. Men det är också krångligt, det är svårt att få bra struktur, och om något går fel på serversidan var det svårt att få något relevant felmeddelande. Det gjorde att jag tvingades skriva mycket extra kod för att validera data både på klient och server. I efterhand skulle jag inte ha skapat ett sådant formulär överhuvudtaget, utan istället försökt skrapa några utvalda musiksidor och försöka automatisera detta så mycket som möjligt. 
 
 ### Källor
 [1] The Open Web Application Security Project, “OWASP Top 10 - 2013, The Ten Most Critical Web Application Security Risks”, 2013. [Online]. Tillgänglig: http://owasptop10.googlecode.com/files/OWASP%20Top%2010%20-%202013.pdf. [Hämtad: 23 november, 2015].
