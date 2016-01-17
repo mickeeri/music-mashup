@@ -13,9 +13,11 @@ class Facade
         try {
             $this->db = new \PDO(\Settings::DSN, \Settings::USERNAME, \Settings::PASSWORD);
             $this->db->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
+
         } catch (\PDOException $e) {
             http_response_code(500);
-            echo $e->getMessage();
+            echo "Databasfel. ".$e->getMessage();
+            exit;
         }
 
         $this->dal = new \models\AlbumListDAL($this->db);

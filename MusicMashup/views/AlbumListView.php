@@ -25,7 +25,7 @@ class AlbumListView
                     <a href="'.$this->albumList->getLink().'">'.$this->albumList->getSource().'</a></h4>
                 </div>
                 '.$this->renderAlbums().
-                '<small>Albuminformation från <img class="last-fm-logo" src="images/Last.fm_Logo_Black.png"/></small>';
+                '<small>Albuminformation från <img class="last-fm-logo" src="images/Last.fm_Logo_Black.png" alt="Last.fms logga"/></small>';
         }
 
         return $ret;

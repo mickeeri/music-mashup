@@ -20,3 +20,6 @@ class DeleteListException extends \Exception {};
 
 // DB Exceptions
 class ListAlreadyExistsException extends \Exception {};
+
+// AlbumListModel Exceptions
+class AlbumListModelException extends \Exception {};

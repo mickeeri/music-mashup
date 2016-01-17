@@ -157,9 +157,8 @@ AlbumListMaker.prototype.displaySearchResults = function(albumMatches) {
     });
 };
 
+
 AlbumListMaker.prototype.selectAlbum = function(clickedAlbumListItem) {
-
-
 
     // Adds album to top list.
     this.addAlbumToList(clickedAlbumListItem);
@@ -177,6 +176,7 @@ AlbumListMaker.prototype.selectAlbum = function(clickedAlbumListItem) {
     $("#album-li-"+this.albumNumber).addClass("active-li");
 };
 
+// Adds album to list.
 AlbumListMaker.prototype.addAlbumToList = function (selectedAlbum) {
 
     var that = this;
@@ -219,6 +219,7 @@ AlbumListMaker.prototype.addAlbumToList = function (selectedAlbum) {
     }
 };
 
+// Extracts and creates albums that are in the list.
 AlbumListMaker.prototype.getAlbumsFromTopList = function (selectedAlbums) {
 
     // The albums in the list are extracted and saved as objects in array.

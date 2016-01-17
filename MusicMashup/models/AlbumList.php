@@ -20,9 +20,21 @@ class AlbumList
      */
     public function __construct($year, $source, $link, $albums)
     {
+        if (is_numeric($year) === false) {
+            throw new \AlbumListModelException();
+        }
+
+        if (is_string($source) === false || $source === "") {
+            throw new \AlbumListModelException();
+        }
+
+        if (is_string($link) === false || $link === "") {
+            throw new \AlbumListModelException();
+        }
+
         $this->year = filter_var($year, FILTER_SANITIZE_STRING);
         $this->source = filter_var($source, FILTER_SANITIZE_STRING);
-        $this->link = filter_var($link, FILTER_SANITIZE_STRING);
+        $this->link = filter_var($link, FILTER_SANITIZE_URL);
         $this->albums = $albums;
     }
 

@@ -32,7 +32,9 @@ class HomeController
             $this->view->setYears($years);
 
         } catch (\FetchAlbumListsException $e) {
-
+            $this->view->setErrorMessage("Fel uppstod när listorna skulle hämtas från databasen.");
+        } catch (\Exception $e) {
+            $this->view->setErrorMessage("Ett fel uppstod.");
         }
     }
 

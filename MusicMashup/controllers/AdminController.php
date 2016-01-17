@@ -20,10 +20,10 @@ class AdminController
     /**
      * @return \views\AdminView
      */
-
     public function getLists()
     {
 
+        // If user has asked to delete album. Show album delete confirmation.
         if (isset($this->listToDelete)) {
             try {
                 $list = $this->facade->getListByID($this->listToDelete);
@@ -35,7 +35,7 @@ class AdminController
             }
         }
 
-        // Delete list.
+        // If user has submittet delete list confirmation. Delete list and redirect.
         if ($this->view->wantsToDelteList()) {
 
             $listID = $this->view->getListToDelete();
@@ -43,6 +43,7 @@ class AdminController
             $this->navigationView->redirectToAdminListView("Listan är raderad.");
         }
 
+        // Else just show all the lists.
         try {
             $years = $this->facade->getYearsAndLists();
             $this->view->setYears($years);
