@@ -3,12 +3,10 @@
 // Album List object. Retuns array of error messages on failed validation.
 var AlbumList = function (source, link, year) {
 
-
     this.source;
     this.link;
     this.year;
-    // Array of album objects.
-    this.albums = [];
+    this.albums = []; // Array of album objects
 
     $(".some-div").text(source);
     var errorMessages = [];
@@ -46,4 +44,3 @@ var AlbumList = function (source, link, year) {
         return $("#create-list-messages").text(string).html();
     }
 };
-

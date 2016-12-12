@@ -9,7 +9,6 @@ class AdminController
     private $navigationView;
     public $listToDelete;
 
-
     function __construct(\views\AdminListsView $alv, \models\Facade $facade, \views\NavigationView $nv)
     {
         $this->facade = $facade;
@@ -22,7 +21,6 @@ class AdminController
      */
     public function getLists()
     {
-
         // If user has asked to delete album. Show album delete confirmation.
         if (isset($this->listToDelete)) {
             try {

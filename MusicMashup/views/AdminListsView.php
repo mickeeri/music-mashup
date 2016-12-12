@@ -65,8 +65,6 @@ class AdminListsView
         }
 
         return $ret;
-
-
     }
 
     /**

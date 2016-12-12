@@ -2,7 +2,6 @@
 
 namespace models;
 
-
 class Year
 {
     private $year;
@@ -23,5 +22,4 @@ class Year
     {
         return $this->lists;
     }
-    
 }

@@ -10,7 +10,6 @@ class ListController
     private $navigationView;
     private $facade;
 
-
     public function __construct(\views\AlbumListView $view,\views\NavigationView $nv, \models\Facade $f)
     {
         $this->view = $view;

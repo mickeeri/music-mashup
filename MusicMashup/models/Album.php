@@ -54,7 +54,6 @@ class Album
 
         // If not provided, get spotifyURI from Spotify Api.
         $this->webService = new \models\WebServiceModel();
-        //$this->spotifyURI = $spotifyURI;
 
         if (!$spotifyURI) {
             $this->spotifyURI = $this->webService->getAlbumSpotifyURI($this->artist, $this->name);
@@ -67,12 +66,6 @@ class Album
             $this->spotifyURI = $spotifyURI;
         }
     }
-
-//    private function getContentFromWebService()
-//    {
-//        $wsm = new \models\WebServiceModel();
-//        return $wsm->getAlbumInfo($this->artist, $this->name);
-//    }
 
     public function setAlbumID($albumID)
     {

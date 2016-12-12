@@ -29,7 +29,6 @@ var AlbumListMaker = function(){
         $(this).select();
     });
 
-
     // Event listener for first input fields.
     $(createListForm).submit(function (e) {
         // Prevent reloading of page.
@@ -266,12 +265,7 @@ AlbumListMaker.prototype.saveList = function (albums) {
     // Adding albums to already created list.
     this.list.albums = albums;
 
-    console.log(this.list);
-
     $.post("AjaxHandler.php", this.list).done(function(response){
-
-        console.log(response);
-
         // Post went fine. Show success message and disable save-button.
         that.displayMessage(messageDiv, that.messageTypeSuccess, "Listan sparad utan problem!");
         $("#save-list-button").fadeOut();
@@ -283,7 +277,6 @@ AlbumListMaker.prototype.saveList = function (albums) {
         var errorMessage = "";
 
         if (response.responseText !== "") {
-
             errorMessage = response.responseText;
         } else {
             errorMessage = ("Ett fel uppstod när listan skulle sparas.");
@@ -321,6 +314,7 @@ AlbumListMaker.prototype.displayMessage = function (messageContainer, messageTyp
         });
 
         messages.length = 0;
+
     } else {
         $(messageContainer).append('<p>'+messages+'</p>');
     }

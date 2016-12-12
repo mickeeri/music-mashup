@@ -12,11 +12,8 @@ if (\Settings::DISPLAY_ERRORS) {
     ini_set('display_errors', 'ON');
 }
 
-
-
 if ($_SERVER["HTTP_HOST"] === "localhost:8888") {
     require_once("../../kint-master/Kint.class.php");
-
 }
 
 session_start();
@@ -33,8 +30,3 @@ $lv = new \views\LayoutView();
 $testSpotifyAPI = new \models\WebServiceModel();
 
 $lv->renderLayout($nv, $view);
-
-
-
-
-

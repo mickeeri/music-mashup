@@ -3,12 +3,9 @@
 class Settings
 {
     const DISPLAY_ERRORS = true;
-
-    const SECRET_ADMIN_URL = "";
-
+    const SECRET_ADMIN_URL = "/admin";
     const LASTFM_API_KEY = "";
-
-    const USERNAME = "root";
-    const PASSWORD = "root";
-    const DSN = "mysql:dbname=;host=;port=";
+    const USERNAME = "db user name";
+    const PASSWORD = "db password";
+    const DSN = "mysql:dbname=;host=;port=3306";
 }

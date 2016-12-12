@@ -4,7 +4,6 @@ namespace models;
 
 require_once ("models/WebServiceModel.php");
 
-
 class AlbumListDAL
 {
     private $db;
@@ -87,14 +86,10 @@ class AlbumListDAL
         }
 
         return $years;
-
-
     }
 
     public function getListsForYear($year)
     {
-
-
         $stmt = $this->db->query('SELECT listID, year, source, link FROM albumlist WHERE year ='.$year);
         //$stmt->bindParam(':year', $year);
         $stmt->setFetchMode(\PDO::FETCH_ASSOC);
@@ -153,8 +148,6 @@ class AlbumListDAL
         }
 
         return $albums;
-
-
     }
 
     public function deleteListByID($listID)
@@ -166,8 +159,6 @@ class AlbumListDAL
 
         // Delete all albums with that id.
         $this->deleteAlbumsByListID($listID);
-
-
     }
 
     private function deleteAlbumsByListID($listID)
@@ -176,5 +167,4 @@ class AlbumListDAL
         $stmt->bindParam(':listID', $listID);
         $stmt->execute();
     }
-
 }

@@ -5,7 +5,6 @@ namespace models;
 
 class WebServiceModel
 {
-
     /**
      * Using spotify api to get spotify uri.
      * @param string $artist
@@ -44,5 +43,4 @@ class WebServiceModel
         $uri = $result->albums->items[0]->uri;
         return filter_var($uri, FILTER_SANITIZE_STRING);
     }
-
 }

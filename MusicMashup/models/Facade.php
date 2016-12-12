@@ -47,7 +47,6 @@ class Facade
     public function getYearsAndLists()
     {
         try {
-
             $yearArr = array();
 
             foreach ($this->getYears() as $year) {

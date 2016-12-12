@@ -27,7 +27,6 @@ $(document).ready(function () {
               url: document.location.pathname + "?param=" + new Date(),
               error: function() {
                   $('.error-div').remove();
-                  console.log("Error");
                   $('main').prepend('<div class="error error-div">Det verkar som att du har tappat din uppkoppling.</div>');
                   // Keep user from trying to send created list to server.
                   if ($("#save-list-button") != "") {
